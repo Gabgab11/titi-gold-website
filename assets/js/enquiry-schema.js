@@ -76,17 +76,17 @@ export const BUSINESS_KEYS = Object.freeze(Object.keys(BUSINESSES));
 
 export const BUDGET_OPTIONS = Object.freeze([
   "Under ₦250,000",
-  "₦250,000 – ₦750,000",
-  "₦750,000 – ₦2,000,000",
+  "₦250,000 to ₦750,000",
+  "₦750,000 to ₦2,000,000",
   "Above ₦2,000,000",
   "To be discussed",
 ]);
 
 export const GUEST_OPTIONS = Object.freeze([
   "Under 50",
-  "50 – 150",
-  "150 – 300",
-  "300 – 500",
+  "50 to 150",
+  "150 to 300",
+  "300 to 500",
   "Over 500",
   "Not sure yet",
 ]);

@@ -260,7 +260,7 @@ export function initEnquiryForm({ form, site, toast = () => {} }) {
           b.textContent = "Copied";
           toast("Your enquiry has been copied");
         } catch {
-          toast("Couldn't copy — please select and copy the text manually");
+          toast("Couldn't copy. Please select and copy the text manually.");
         }
       });
       actions.push(b);
@@ -284,7 +284,7 @@ export function initEnquiryForm({ form, site, toast = () => {} }) {
   }
 
   function showFailure(data, text) {
-    statusCard("error", "We couldn't send your enquiry", [text, "Your details are still in the form — please try again in a moment."], fallbackActions(data));
+    statusCard("error", "We couldn't send your enquiry", [text, "Your details are still in the form. Please try again in a moment."], fallbackActions(data));
   }
 
   function showSuccess(data, reference) {
@@ -380,7 +380,7 @@ export function initEnquiryForm({ form, site, toast = () => {} }) {
       if (err.name === "AbortError") {
         showFailure(data, "The connection timed out before we could confirm your enquiry was received.");
       } else if (window.location.protocol === "file:") {
-        showNotConnected(data); // opened straight from disk — there is no server to send to
+        showNotConnected(data); // opened straight from disk, so there is no server to send to
       } else {
         showFailure(data, "We couldn't reach our server. Please check your internet connection.");
       }

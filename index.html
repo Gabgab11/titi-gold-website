@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TITI GOLD — Events, Impact &amp; Style</title>
-  <meta name="description" content="TITI GOLD brings together TITIGOLD Project and Event Management, TITIGOLD Foundation and TITIGOLD Fashion Hub — memorable experiences, community impact and personal style under one name.">
+  <title>TITI GOLD | Events, Impact &amp; Style</title>
+  <meta name="description" content="TITI GOLD brings together TITIGOLD Project and Event Management, TITIGOLD Foundation and TITIGOLD Fashion Hub: memorable events, community impact and personal style under one name.">
   <meta name="theme-color" content="#151515">
   <!-- CONTENT: once the domain is live, set the canonical and og:url, e.g. https://www.titigold.com/ -->
   <!-- <link rel="canonical" href="https://www.titigold.com/"> -->
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="TITI GOLD">
-  <meta property="og:title" content="TITI GOLD — Events, Impact &amp; Style">
-  <meta property="og:description" content="Project and event management, a purpose-led foundation and a fashion hub — one vision, three expressions.">
+  <meta property="og:title" content="TITI GOLD | Events, Impact &amp; Style">
+  <meta property="og:description" content="Project and event management, a purpose-led foundation and a fashion hub. One vision, three expressions.">
   <meta property="og:image" content="assets/img/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
 
@@ -27,10 +27,10 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Jost:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="assets/css/styles.css">
 
-  <!-- Runs before first paint: marks JS as available and decides whether to play the opening animation.
-       INTRO_MODE: "session" = once per browser session, "always" = every page load, "off" = never.
-       Add ?intro to the address to replay it. If you edit this script, update its sha256 hash in vercel.json. -->
-  <script>(function(){var INTRO_MODE="session",d=document.documentElement;d.classList.add("js");try{var force=/[?&]intro\b/.test(location.search),still=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches,seen=false;try{seen=sessionStorage.getItem("tg-intro")==="1"}catch(e){}if(INTRO_MODE==="off"||(still&&!force)||(INTRO_MODE==="session"&&seen&&!force))return;try{sessionStorage.setItem("tg-intro","1")}catch(e){}d.classList.add("intro-active");var done=false,timers=[];function finish(skipped){if(done)return;done=true;timers.forEach(clearTimeout);d.classList.add("intro-reveal");d.classList.remove("intro-active");if(skipped)d.classList.add("intro-skipped");setTimeout(function(){d.classList.remove("intro-skipped","intro-reveal");var el=document.getElementById("intro");if(el)el.remove()},skipped?500:50)}timers.push(setTimeout(function(){d.classList.add("intro-reveal")},4300));timers.push(setTimeout(function(){finish(false)},5050));document.addEventListener("keydown",function(e){if(e.key==="Escape")finish(true)},true);document.addEventListener("click",function(e){if(!done&&e.target.closest&&e.target.closest("#intro"))finish(true)},true)}catch(e){d.classList.remove("intro-active")}})();</script>
+  <!-- Runs before first paint: marks JS as available and starts the opening animation.
+       INTRO_MODE: "always" = every page load and reload, "session" = once per browser session, "off" = never.
+       If you edit this script, update its sha256 hash in vercel.json. -->
+  <script>(function(){var INTRO_MODE="always",d=document.documentElement;d.classList.add("js");try{var still=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches,seen=false;try{seen=sessionStorage.getItem("tg-intro")==="1"}catch(e){}if(INTRO_MODE==="off"||still||(INTRO_MODE==="session"&&seen))return;try{sessionStorage.setItem("tg-intro","1")}catch(e){}d.classList.add("intro-active");if("scrollRestoration"in history)history.scrollRestoration="manual";if(location.hash)history.replaceState(null,"",location.pathname+location.search);var top=function(){window.scrollTo(0,0)};top();document.addEventListener("DOMContentLoaded",top);window.addEventListener("load",top);var done=false,timers=[];function finish(skipped){if(done)return;done=true;timers.forEach(clearTimeout);d.classList.add("intro-reveal");d.classList.remove("intro-active");if(skipped)d.classList.add("intro-skipped");setTimeout(function(){d.classList.remove("intro-skipped","intro-reveal");var el=document.getElementById("intro");if(el)el.remove()},skipped?500:50)}timers.push(setTimeout(function(){d.classList.add("intro-reveal")},4300));timers.push(setTimeout(function(){finish(false)},5050));document.addEventListener("keydown",function(e){if(e.key==="Escape")finish(true)},true);document.addEventListener("click",function(e){if(!done&&e.target.closest&&e.target.closest("#intro"))finish(true)},true)}catch(e){d.classList.remove("intro-active")}})();</script>
   <script type="module" src="assets/js/main.js"></script>
 
   <script type="application/ld+json">
@@ -54,6 +54,7 @@
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
     <defs>
       <symbol id="icon-arrow-up-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></symbol>
+      <symbol id="icon-arrow-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></symbol>
       <symbol id="icon-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></symbol>
       <symbol id="icon-events" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><path d="M11 2.5l1.9 6.2 6.1 1.8-6.1 1.8L11 18.5l-1.9-6.2L3 10.5l6.1-1.8z"/><path d="M19 15l.7 2.1 2.1.7-2.1.7L19 20.6l-.7-2.1-2.1-.7 2.1-.7z"/></symbol>
       <symbol id="icon-foundation" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><path d="M12 20s-7.5-4.4-9-9.2C2 7.6 4 5 6.9 5c2 0 3.6 1.2 5.1 3 1.5-1.8 3.1-3 5.1-3C20 5 22 7.6 21 10.8 19.5 15.6 12 20 12 20z"/></symbol>
@@ -109,7 +110,7 @@
   <!-- ================= HEADER ================= -->
   <header class="site-header" id="siteHeader">
     <div class="container nav">
-      <a class="logo" href="#home" aria-label="TITI GOLD — back to top">
+      <a class="logo" href="#home" aria-label="TITI GOLD home">
         <img class="logo-mark" src="assets/img/brand/titigold-mark.svg" alt="" width="33" height="42">
         <span class="logo-text" aria-hidden="true">TITI GOLD<small>Events · Impact · Style</small></span>
       </a>
@@ -139,7 +140,7 @@
         <div class="hero-copy">
           <p class="hero-kicker eyebrow" data-hero style="--d:.05s">A signature of excellence</p>
           <h1 id="hero-title" data-hero style="--d:.15s">Grace in every detail. <em>Gold in every vision.</em></h1>
-          <p class="hero-intro" data-hero style="--d:.3s">Welcome to TITI GOLD — where meaningful experiences, community impact and personal style come together under one distinctive name.</p>
+          <p class="hero-intro" data-hero style="--d:.3s">Welcome to TITI GOLD, where meaningful experiences, community impact and personal style come together under one name.</p>
           <div class="hero-actions" data-hero style="--d:.42s">
             <a class="btn" href="#businesses">Discover our brands <svg aria-hidden="true"><use href="#icon-arrow-up-right"/></svg></a>
             <a class="btn btn-outline" href="#enquire">Let's work together</a>
@@ -185,7 +186,7 @@
             <p class="eyebrow">The TITI GOLD family</p>
             <h2 id="businesses-title">Three brands.<br>One golden standard.</h2>
           </div>
-          <p>Explore the business that fits your needs. Each has its own purpose and personality — and each enquiry goes straight to the right team.</p>
+          <p>Explore the business that fits your needs. Each one has its own purpose, and every enquiry goes to the right team.</p>
         </div>
 
         <div class="business-grid">
@@ -217,7 +218,7 @@
             <div class="card-content">
               <p class="eyebrow">Purpose · People · Progress</p>
               <h3 id="foundation-title">TITIGOLD Foundation</h3>
-              <p>A purpose-led platform for community initiatives, meaningful partnerships and work that makes a difference.</p>
+              <p>A purpose-led platform for community initiatives and partnerships that make a real difference.</p>
               <ul class="card-services" aria-label="Ways to get involved">
                 <li>Partnerships &amp; sponsorship</li>
                 <li>Volunteering &amp; donations</li>
@@ -270,7 +271,7 @@
             professional achievements and personal message.
           -->
           <p>TITI GOLD brings together a passion for creating memorable experiences, supporting meaningful causes and celebrating personal expression.</p>
-          <p>Under one name and one standard of care, each business is led with the same belief: that the details matter, that people come first, and that every collaboration should leave something beautiful behind.</p>
+          <p>Each of the three businesses is run with the same care for detail and for the people it serves.</p>
           <div class="about-stats">
             <div class="stat"><strong>Events</strong><span>Ideas into experiences</span></div>
             <div class="stat"><strong>Impact</strong><span>Purpose into action</span></div>
@@ -358,8 +359,8 @@
                 <select id="budget" name="budget" aria-describedby="budget-error">
                   <option value="">Select a range</option>
                   <option>Under ₦250,000</option>
-                  <option>₦250,000 – ₦750,000</option>
-                  <option>₦750,000 – ₦2,000,000</option>
+                  <option>₦250,000 to ₦750,000</option>
+                  <option>₦750,000 to ₦2,000,000</option>
                   <option>Above ₦2,000,000</option>
                   <option>To be discussed</option>
                 </select>
@@ -370,9 +371,9 @@
                 <select id="guests" name="guests" aria-describedby="guests-error">
                   <option value="">Select a range</option>
                   <option>Under 50</option>
-                  <option>50 – 150</option>
-                  <option>150 – 300</option>
-                  <option>300 – 500</option>
+                  <option>50 to 150</option>
+                  <option>150 to 300</option>
+                  <option>300 to 500</option>
                   <option>Over 500</option>
                   <option>Not sure yet</option>
                 </select>
@@ -447,7 +448,7 @@
     <div class="container">
       <div class="footer-top">
         <div>
-          <a class="logo" href="#home" aria-label="TITI GOLD — back to top">
+          <a class="logo" href="#home" aria-label="TITI GOLD home">
             <img class="logo-mark" src="assets/img/brand/titigold-mark.svg" alt="" width="33" height="42">
             <span class="logo-text" aria-hidden="true">TITI GOLD<small>Events · Impact · Style</small></span>
           </a>
@@ -468,7 +469,7 @@
           <ul>
             <li><a href="#about">About Titi</a></li>
             <li><a href="#enquire">Enquiries</a></li>
-            <li><a href="#home">Back to top ↑</a></li>
+            <li><a href="#home">Back to top</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -481,10 +482,14 @@
       </div>
       <div class="footer-bottom">
         <span>© <span id="year">2026</span> TITI GOLD. All rights reserved.</span>
-        <span>Portraits by Sirshow · Made with intention and a touch of gold.</span>
+        <span>Portraits by Sirshow</span>
       </div>
     </div>
   </footer>
+
+  <button class="to-top" id="toTop" type="button" aria-label="Back to top" hidden>
+    <svg aria-hidden="true"><use href="#icon-arrow-up"/></svg>
+  </button>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>

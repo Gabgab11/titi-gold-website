@@ -105,7 +105,7 @@ function json(status, body, extraHeaders = {}) {
 function htmlPage(status, title, paragraphs) {
   const body = `<!DOCTYPE html><html lang="en-GB"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
-<title>${escapeHtml(title)} — TITI GOLD</title><link rel="stylesheet" href="/assets/css/styles.css"></head>
+<title>${escapeHtml(title)} | TITI GOLD</title><link rel="stylesheet" href="/assets/css/styles.css"></head>
 <body><main class="section"><div class="container" style="max-width:640px">
 <p class="eyebrow">TITI GOLD</p><h1 style="font-size:clamp(2.2rem,6vw,3.4rem);margin:12px 0 24px">${escapeHtml(title)}</h1>
 ${paragraphs.map((p) => `<p>${escapeHtml(p)}</p>`).join("")}
@@ -156,7 +156,7 @@ const FIELD_ROWS = [
 function buildNotificationEmail(data, reference) {
   const cfg = BUSINESSES[data.business];
   const rows = FIELD_ROWS.filter(([k]) => data[k]);
-  const subject = oneLine(`New enquiry · ${cfg.shortName} · ${data.enquiryType} — ${data.name} [${reference}]`, 200);
+  const subject = oneLine(`New enquiry · ${cfg.shortName} · ${data.enquiryType} · ${data.name} [${reference}]`, 200);
 
   const text = [
     `New enquiry for ${cfg.name}`,
@@ -191,7 +191,7 @@ ${rows.map(([k, label]) => `<tr><td style="padding:10px 12px 10px 0;border-botto
 function buildConfirmationEmail(data, reference) {
   const cfg = BUSINESSES[data.business];
   const first = data.name.split(" ")[0];
-  const subject = `We've received your enquiry — ${cfg.name}`;
+  const subject = `Your enquiry to ${cfg.name}`;
   const text = `Dear ${first},\n\nThank you for contacting ${cfg.name}. We've received your enquiry (reference ${reference}) and will be in touch soon.\n\nWarm regards,\nTITI GOLD`;
   const html = `<!DOCTYPE html><html><body style="margin:0;background:#faf7f0;font-family:Helvetica,Arial,sans-serif;color:#151515">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="padding:24px 12px"><tr><td align="center">
@@ -349,7 +349,7 @@ export async function handleEnquiryRequest(request, options = {}) {
   const result = validateEnquiry(raw, { minDate: minEventDate(now) });
   if (!result.ok) {
     return html
-      ? htmlPage(422, "Please check your enquiry", [...Object.values(result.errors), "Use your browser's back button to return to the form — your answers should still be there."])
+      ? htmlPage(422, "Please check your enquiry", [...Object.values(result.errors), "Use your browser's back button to return to the form. Your answers should still be there."])
       : json(422, { ok: false, code: "invalid", errors: result.errors });
   }
   const data = result.data;

@@ -171,11 +171,56 @@ function renderContact() {
   }
 }
 
+/* ---------- In-page links ----------
+   Scroll to the section without adding "#section" to the address, so a
+   reload always starts from the top with the opening animation. */
+function scrollBehavior() { return reducedMotion.matches ? "auto" : "smooth"; }
+
+function initInPageLinks() {
+  document.addEventListener("click", (e) => {
+    const link = e.target.closest('a[href^="#"]');
+    if (!link || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const id = link.getAttribute("href").slice(1);
+    const target = id ? document.getElementById(id) : null;
+    if (!target) return;
+    e.preventDefault();
+    if (id === "home") window.scrollTo({ top: 0, behavior: scrollBehavior() });
+    else target.scrollIntoView({ behavior: scrollBehavior(), block: "start" });
+    // Move keyboard focus with the scroll (the form links manage their own focus).
+    if (!link.hasAttribute("data-choose-business")) {
+      if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
+      target.focus({ preventScroll: true });
+    }
+  });
+}
+
+/* ---------- Back to top ---------- */
+function initBackToTop() {
+  const btn = $("#toTop");
+  if (!btn) return;
+  btn.hidden = false;
+  let ticking = false;
+  const update = () => {
+    btn.classList.toggle("is-visible", window.scrollY > window.innerHeight * 0.8);
+    ticking = false;
+  };
+  window.addEventListener("scroll", () => {
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
+  }, { passive: true });
+  btn.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: scrollBehavior() });
+    $(".site-header .logo")?.focus({ preventScroll: true });
+  });
+  update();
+}
+
 /* ---------- Boot ---------- */
 initNav();
 initHeader();
 initActiveSection();
 initReveal();
+initInPageLinks();
+initBackToTop();
 renderContact();
 
 const yearEl = $("#year");

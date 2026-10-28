@@ -722,6 +722,33 @@ em { font-style: italic; }
 }
 .toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
 
+/* ---------- 13b. Back to top ---------- */
+.to-top {
+  position: fixed;
+  right: max(16px, env(safe-area-inset-right, 0px));
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  z-index: 45;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  background: rgba(21, 21, 21, 0.92);
+  color: var(--gold);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition: opacity 0.3s var(--ease), transform 0.3s var(--ease), background-color 0.2s, color 0.2s;
+}
+.to-top[hidden] { display: grid; }
+.to-top.is-visible { opacity: 1; transform: none; pointer-events: auto; }
+.to-top svg { width: 18px; height: 18px; }
+.to-top:hover { background: var(--gold); color: var(--black); }
+.intro-active .to-top { display: none; }
+
 /* ---------- 14. Motion ---------- */
 /* Content is fully visible without JavaScript; .js enables the effect. */
 .js [data-reveal] {
@@ -1003,4 +1030,11 @@ em { font-style: italic; }
   .site-header, .hero-rings, .toast, .contact-band, .form-panel { display: none; }
   body { background: #fff; }
   .hero, .booking, .site-footer { background: #fff; color: #000; }
+}
+
+/* Sections receive focus when reached from a link; the whole-section outline isn't useful. */
+section[tabindex="-1"]:focus, main[tabindex="-1"]:focus { outline: none; }
+
+@media (max-width: 680px) {
+  .toast { bottom: calc(76px + env(safe-area-inset-bottom, 0px)); }
 }
