@@ -96,6 +96,16 @@ To use your own domain on GitHub Pages: repository **Settings → Pages → Cust
 
 > If you change the small inline `<script>` in the `<head>` of `index.html`, update its `sha256-…` hash in `vercel.json` or browsers will block it.
 
+## Opening animation
+
+On a visitor's first page view in a browser session, the site opens with a 5-second animation: the four gold-foil pieces of the TG monogram fly in and lock together, a light sweeps across the gold, the wordmark and tagline appear, and the screen lifts to reveal the site.
+
+- **Replay it:** add `?intro` to the address, e.g. `https://gabgab11.github.io/titi-gold-website/?intro`.
+- **Skip:** visitors can tap **Skip intro**, tap anywhere, or press Esc.
+- **How often it plays:** change `INTRO_MODE` in the small script in the `<head>` of `index.html` to `"always"` (every page load), `"session"` (default) or `"off"`. Then update that script's hash in `vercel.json` (see the note above).
+- Visitors who have turned on "reduce motion" on their device go straight to the site.
+- The animation uses only transform and opacity, so it runs smoothly on phones; it sizes itself for portrait and landscape phones, tablets and desktops.
+
 ## Logo
 
 The TG monogram was redrawn as clean vector geometry, fitted to the original artwork (97.5% overlap — the difference is only the crinkled foil edges). It keeps the original's proportions, including the heavier top of the G and its flat spur.
