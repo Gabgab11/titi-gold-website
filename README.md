@@ -2,6 +2,8 @@
 
 The website for **TITIGOLD Project and Event Management**, **TITIGOLD Foundation** and **TITIGOLD Fashion Hub**.
 
+**Live site:** https://gabgab11.github.io/titi-gold-website/ (GitHub Pages)
+
 A fast, dependency-free static site with a smart enquiry form and a small server function that delivers enquiries by **email (Resend)** and/or saves them to a **database (Supabase)**.
 
 > **Enquiry delivery is not switched on yet.** Until you complete step 2 below, the form validates everything but tells visitors plainly that their enquiry *has not been sent*, keeps their details, and offers an email/WhatsApp/copy fallback. It never claims a submission was delivered unless the server confirms it.
@@ -60,7 +62,15 @@ Enquiries then appear in **Table Editor → enquiries**, with a `status` column 
 
 Set `ALLOWED_ORIGINS=https://titigold.com,https://www.titigold.com` once the domain is live.
 
-## 3. Deploy (Vercel)
+## 3. Hosting
+
+### GitHub Pages (current)
+
+Every push to `main` runs the tests and publishes the site through `.github/workflows/pages.yml`. GitHub Pages only serves static files, so the enquiry server function does not run there: the form tells visitors online enquiries aren't switched on yet. To receive enquiries, host the same repository on Vercel (below), which runs `api/enquiry.js`.
+
+To use your own domain on GitHub Pages: repository **Settings → Pages → Custom domain**.
+
+### Vercel (needed for enquiry delivery)
 
 1. Push this folder to a GitHub repository.
 2. Import it at [vercel.com/new](https://vercel.com/new) — no framework, no build command.
