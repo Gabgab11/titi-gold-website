@@ -34,6 +34,16 @@ jobs:
           cp -r index.html 404.html robots.txt assets _site/
           touch _site/.nojekyll
 
+      # Browsers cache files on GitHub Pages for up to 10 minutes. Stamp each
+      # stylesheet and script link with this commit so updates show immediately.
+      - name: Version asset links
+        run: |
+          V="${GITHUB_SHA::8}"
+          sed -i "s#assets/css/styles.css\"#assets/css/styles.css?v=$V\"#g; s#assets/js/main.js\"#assets/js/main.js?v=$V\"#g" _site/index.html _site/404.html
+          sed -i -E "s#from \"\./([a-z-]+)\.js\"#from \"./\1.js?v=$V\"#g" _site/assets/js/*.js
+          grep -o 'styles.css?v=[a-f0-9]*' _site/index.html
+          grep -ho 'from "[^"]*"' _site/assets/js/*.js
+
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
