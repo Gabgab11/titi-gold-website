@@ -21,7 +21,7 @@ if (existsSync(join(root, ".env"))) process.loadEnvFile(join(root, ".env"));
 
 const PORT = Number(process.env.PORT) || 3000;
 const PUBLIC_DIRS = ["assets"];
-const PUBLIC_FILES = ["index.html", "robots.txt", "sitemap.xml", "404.html"];
+const PUBLIC_FILES = ["index.html", "robots.txt", "sitemap.xml", "404.html", "favicon.ico"];
 
 const TYPES = {
   ".html": "text/html; charset=utf-8",
