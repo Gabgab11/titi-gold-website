@@ -1,0 +1,8 @@
+# Not part of the live website
+brand-kit/
+tests/
+supabase/
+scripts/
+*.md
+.env*
+!.env.example

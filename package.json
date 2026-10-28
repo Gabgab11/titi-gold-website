@@ -1,0 +1,14 @@
+{
+  "name": "titi-gold-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TITI GOLD — website for TITIGOLD Project and Event Management, TITIGOLD Foundation and TITIGOLD Fashion Hub.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "node scripts/dev-server.js",
+    "test": "node --test tests/*.test.js"
+  }
+}
