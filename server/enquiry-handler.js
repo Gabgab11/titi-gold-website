@@ -105,7 +105,7 @@ function json(status, body, extraHeaders = {}) {
 function htmlPage(status, title, paragraphs) {
   const body = `<!DOCTYPE html><html lang="en-GB"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
-<title>${escapeHtml(title)} | TITI GOLD</title><link rel="stylesheet" href="/assets/css/styles.css"></head>
+<title>${escapeHtml(title)} | Titi Gold</title><link rel="stylesheet" href="/assets/css/styles.css"></head>
 <body><main class="section"><div class="container" style="max-width:640px">
 <p class="eyebrow">TITI GOLD</p><h1 style="font-size:clamp(2.2rem,6vw,3.4rem);margin:12px 0 24px">${escapeHtml(title)}</h1>
 ${paragraphs.map((p) => `<p>${escapeHtml(p)}</p>`).join("")}
@@ -192,7 +192,7 @@ function buildConfirmationEmail(data, reference) {
   const cfg = BUSINESSES[data.business];
   const first = data.name.split(" ")[0];
   const subject = `Your enquiry to ${cfg.name}`;
-  const text = `Dear ${first},\n\nThank you for contacting ${cfg.name}. We've received your enquiry (reference ${reference}) and will be in touch soon.\n\nWarm regards,\nTITI GOLD`;
+  const text = `Dear ${first},\n\nThank you for contacting ${cfg.name}. We've received your enquiry (reference ${reference}) and will be in touch soon.\n\nWarm regards,\nTiti Gold`;
   const html = `<!DOCTYPE html><html><body style="margin:0;background:#faf7f0;font-family:Helvetica,Arial,sans-serif;color:#151515">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="padding:24px 12px"><tr><td align="center">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#fff;border:1px solid #e4dccb">
@@ -201,7 +201,7 @@ function buildConfirmationEmail(data, reference) {
 <p>Dear ${escapeHtml(first)},</p>
 <p>Thank you for contacting <strong>${escapeHtml(cfg.name)}</strong>. We've received your enquiry and will be in touch soon.</p>
 <p style="color:#645f56;font-size:13px">Your reference: ${escapeHtml(reference)}</p>
-<p>Warm regards,<br>TITI GOLD</p>
+<p>Warm regards,<br>Titi Gold</p>
 </td></tr></table></td></tr></table></body></html>`;
   return { subject, text, html };
 }

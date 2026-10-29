@@ -42,6 +42,8 @@ export const BUSINESSES = Object.freeze({
       "Sponsorship",
       "Volunteering",
       "Donation",
+      "Book donation",
+      "Educational support",
       "Community project",
       "General enquiry",
     ],

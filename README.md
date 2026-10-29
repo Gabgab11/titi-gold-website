@@ -87,7 +87,9 @@ To use your own domain on GitHub Pages: repository **Settings → Pages → Cust
 |---|---|
 | Email, phone, WhatsApp, location, social links | `assets/js/site-config.js` — empty values stay hidden |
 | Business names, form questions, dropdown options, budget ranges | `assets/js/enquiry-schema.js` — used by both the form and the server |
-| Page text | `index.html` (look for `CONTENT:` comments) |
+| Home page text | `index.html` |
+| About, Foundation, Fashion Hub, Books pages | `about.html`, `foundation.html`, `fashion.html`, `books.html` |
+| Header menu and footer | appear at the top and bottom of each of the five pages above; change them in all five |
 | Colours, fonts, spacing | `:root` at the top of `assets/css/styles.css` |
 | Photos | `assets/img/photos/` — replace files keeping the same names and 4:5 shape |
 | Logo | `assets/img/brand/` (web) and `brand-kit/` (masters) |
@@ -98,7 +100,7 @@ To use your own domain on GitHub Pages: repository **Settings → Pages → Cust
 
 ## Opening animation
 
-Every time the site is opened or reloaded, it starts at the top with a 5-second animation: the four gold-foil pieces of the TG monogram fly in and lock together, a light sweeps across the gold, the wordmark and tagline appear, and the screen lifts to reveal the site.
+Every time the home page is opened fresh or reloaded, it starts at the top with a 5-second animation (it is skipped when a visitor arrives from another page of the site, so links like Book / Enquire go straight to the form): the four gold-foil pieces of the TG monogram fly in and lock together, a light sweeps across the gold, the wordmark and tagline appear, and the screen lifts to reveal the site.
 
 - **Skip:** visitors can tap **Skip intro**, tap anywhere, or press Esc.
 - **How often it plays:** change `INTRO_MODE` in the small script in the `<head>` of `index.html` to `"always"` (default, every load and reload), `"session"` (once per browser session) or `"off"`. Then update that script's hash in `vercel.json` (see the note above).

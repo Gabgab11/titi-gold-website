@@ -10,7 +10,7 @@ Outputs (assets/img/brand/):
     titigold-mark.svg          gold-gradient monogram (web default)
     titigold-mark-gold.svg     flat gold, for small sizes and embroidery/print
     titigold-mark-black.svg    flat black, for light backgrounds / stamps
-    titigold-lockup.svg        monogram + "THE TITI-GOLD" wordmark (gradient)
+    titigold-lockup.svg        monogram + "TITI GOLD" wordmark (gradient)
     titigold-lockup-black.svg  lockup in flat black
     titigold-wordmark.svg      wordmark on its own (gradient)
 
@@ -77,7 +77,7 @@ def monogram_paths():
     return [t_shape, ring, bar]
 
 
-def wordmark_path(text="THE TITI-GOLD", target_width=1060.0, baseline=1440.0, tracking=0.16):
+def wordmark_path(text="TITI GOLD", target_width=None, baseline=1440.0, tracking=0.16, letter_scale=None):
     """Outline the wordmark with fontTools so the SVG needs no font installed."""
     from fontTools.ttLib import TTFont
     from fontTools.pens.svgPathPen import SVGPathPen
@@ -95,6 +95,9 @@ def wordmark_path(text="THE TITI-GOLD", target_width=1060.0, baseline=1440.0, tr
     # Trim the last glyph's right side bearing so the block is optically centred.
     last_adv, last_lsb = hmtx[names[-1]]
     last_glyph_w = gs[names[-1]]
+    if target_width is None:
+        # Keep the letters the size they were designed at (fitted to the monogram).
+        target_width = raw_width * (letter_scale or 0.0)
     scale = target_width / raw_width
 
     pen = SVGPathPen(gs)
@@ -139,13 +142,13 @@ def main():
     (OUT / "titigold-mark-gold.svg").write_text(svg(mark_box, mark, "#C6A04A", "TITI GOLD"))
     (OUT / "titigold-mark-black.svg").write_text(svg(mark_box, mark, "#151515", "TITI GOLD"))
 
-    word, cap = wordmark_path()
+    word, cap = wordmark_path(text="TITI\u2009GOLD", letter_scale=0.064, tracking=0.26)
     lock_box = "40 -40 1110 1520"
-    (OUT / "titigold-lockup.svg").write_text(svg(lock_box, mark + [word], "url(#tg-gold-l)", "The Titi-Gold", "tg-gold-l"))
-    (OUT / "titigold-lockup-black.svg").write_text(svg(lock_box, mark + [word], "#151515", "The Titi-Gold"))
+    (OUT / "titigold-lockup.svg").write_text(svg(lock_box, mark + [word], "url(#tg-gold-l)", "Titi Gold", "tg-gold-l"))
+    (OUT / "titigold-lockup-black.svg").write_text(svg(lock_box, mark + [word], "#151515", "Titi Gold"))
     top = 1440 - cap
     (OUT / "titigold-wordmark.svg").write_text(
-        svg(f"55 {f(top - 12)} 1080 {f(cap + 24)}", [word], "url(#tg-gold-w)", "The Titi-Gold", "tg-gold-w")
+        svg(f"55 {f(top - 12)} 1080 {f(cap + 24)}", [word], "url(#tg-gold-w)", "Titi Gold", "tg-gold-w")
     )
     print("wrote", *sorted(p.name for p in OUT.glob("*.svg")))
 

@@ -25,7 +25,7 @@ function initNav() {
   const toggle = $("#menuToggle");
   const menu = $("#navMenu");
   if (!toggle || !menu) return;
-  const mobile = window.matchMedia("(max-width: 880px)");
+  const mobile = window.matchMedia("(max-width: 1100px)");
 
   const setOpen = (open, { returnFocus = false } = {}) => {
     toggle.setAttribute("aria-expanded", String(open));
@@ -76,7 +76,8 @@ function initHeader() {
 
 /* ---------- Highlight the current section in the nav ---------- */
 function initActiveSection() {
-  const links = $$(".nav-links a[href^='#']");
+  // Only in-page links; the current page link keeps its aria-current="page".
+  const links = $$(".nav-links a[href^='#']:not([aria-current='page'])");
   const sections = links.map((a) => document.getElementById(a.hash.slice(1))).filter(Boolean);
   if (!("IntersectionObserver" in window) || !sections.length) return;
 
@@ -369,4 +370,13 @@ const yearEl = $("#year");
 if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
 const form = $("#enquiryForm");
-if (form) initEnquiryForm({ form, site: SITE, toast });
+if (form) {
+  initEnquiryForm({ form, site: SITE, toast });
+  // Links from other pages can choose the business: index.html?business=foundation#enquire
+  const wanted = new URLSearchParams(window.location.search).get("business");
+  const radio = wanted && form.querySelector(`input[name="business"][value="${CSS.escape(wanted)}"]`);
+  if (radio && !radio.checked) {
+    radio.checked = true;
+    radio.dispatchEvent(new Event("change", { bubbles: true }));
+  }
+}

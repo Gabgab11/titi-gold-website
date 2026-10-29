@@ -1055,22 +1055,174 @@ em { font-style: italic; }
   .intro-stage { gap: 12px; }
 }
 
-/* ---------- 15. Responsive ---------- */
+/* ---------- 17. Content sections (purpose, work, books, final thought) ---------- */
+.lead { font-family: var(--serif); font-size: clamp(1.35rem, 2.2vw, 1.7rem); line-height: 1.4; color: var(--black); }
+.on-dark .lead { color: var(--champagne); }
+.read-more { margin-top: 8px; }
+.card-links { margin-top: auto; display: flex; flex-wrap: wrap; gap: 4px 22px; }
+.card-links .text-link { margin-top: 0; }
+
+/* A purpose bigger than self */
+.purpose { background: var(--ivory); text-align: center; }
+.purpose-inner { max-width: 50rem; margin-inline: auto; display: grid; justify-items: center; gap: 22px; }
+.purpose-quote {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4.6vw, 3.4rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+.purpose-quote em { color: var(--gold-ink); }
+.purpose-inner > p:not(.eyebrow) { max-width: 40rem; margin: 0; color: var(--muted); }
+.gold-rule { width: 56px; height: 1px; background: var(--gold); border: 0; margin: 0; }
+
+/* My work. My purpose. My impact. */
+.work { background: var(--black); color: var(--white); }
+.work .section-heading > p { color: var(--muted-dark); }
+.pillar-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(232, 216, 176, 0.14); border: 1px solid rgba(232, 216, 176, 0.14); }
+.pillar { background: var(--black); padding: clamp(24px, 3vw, 34px); display: flex; flex-direction: column; gap: 14px; transition: background-color 0.3s; }
+.pillar:hover { background: #1c1a16; }
+.pillar-num { font-family: var(--serif); font-size: 1.1rem; color: var(--gold); }
+.pillar h3 { font-size: clamp(1.35rem, 1.8vw, 1.6rem); color: var(--white); }
+.pillar p { margin: 0; color: var(--muted-dark); font-size: 0.98rem; }
+.work .read-more { margin-top: 28px; }
+.on-dark .text-link { color: var(--gold); }
+.on-dark .text-link:hover { color: var(--champagne); }
+
+/* Books */
+.books { background: var(--linen); }
+.book-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.book {
+  display: grid;
+  grid-template-columns: minmax(120px, 0.42fr) 1fr;
+  gap: clamp(18px, 3vw, 30px);
+  align-items: center;
+  padding: clamp(18px, 3vw, 28px);
+  background: var(--white);
+  border: 1px solid var(--line);
+}
+.book-cover {
+  position: relative;
+  aspect-ratio: 2 / 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 14% 12%;
+  background: linear-gradient(160deg, #24201a, #121212 70%);
+  color: var(--champagne);
+  box-shadow: 0 18px 30px rgba(21, 21, 21, 0.25), inset 6px 0 0 rgba(255, 255, 255, 0.04);
+  transition: transform 0.4s var(--ease);
+}
+.book-cover::before {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border: 1px solid rgba(198, 160, 74, 0.55);
+  pointer-events: none;
+}
+.book:hover .book-cover { transform: translateY(-4px) rotate(-1deg); }
+.book-cover-title { font-family: var(--serif); font-size: clamp(1rem, 1.7vw, 1.3rem); line-height: 1.15; color: var(--gold); }
+.book-cover-title small { display: block; margin-top: 6px; font-size: 0.7em; color: var(--champagne); }
+.book-cover-author { font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase; }
+.book h3 { margin-bottom: 10px; }
+.book p { margin: 0; color: var(--muted); font-size: 0.98rem; }
+.books-note { margin: 28px 0 0; max-width: 46rem; color: var(--muted); }
+
+/* A final thought */
+.final-thought { background: var(--ivory); }
+.final-inner { max-width: 52rem; margin-inline: auto; }
+.final-quote {
+  position: relative;
+  margin: 18px 0 26px;
+  padding-left: clamp(18px, 3vw, 30px);
+  border-left: 2px solid var(--gold);
+  font-family: var(--serif);
+  font-size: clamp(1.6rem, 3.4vw, 2.5rem);
+  line-height: 1.22;
+  letter-spacing: -0.015em;
+}
+.final-inner > p:not(.eyebrow) { color: var(--muted); max-width: 44rem; }
+.signature { margin-top: 28px; display: grid; gap: 6px; }
+.signature-name { font-family: var(--serif); font-style: italic; font-size: 2rem; line-height: 1; color: var(--gold-ink); }
+.signature-tag { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+
+/* ---------- 18. Inner pages ---------- */
+.page-hero { position: relative; overflow: hidden; isolation: isolate; background: var(--black); color: var(--white); }
+.page-hero-inner { padding-block: clamp(56px, 9vw, 110px) clamp(48px, 7vw, 88px); }
+.page-hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(32px, 6vw, 72px); align-items: center; }
+.breadcrumb { display: flex; gap: 10px; margin: 0 0 22px; font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted-dark); }
+.breadcrumb a { color: var(--champagne); }
+.breadcrumb a:hover { color: var(--gold); }
+.page-hero h1 { font-size: clamp(2.5rem, 6vw, 4.8rem); margin: 14px 0 22px; }
+.page-hero h1 em { color: var(--gold); }
+.page-hero .hero-intro { margin: 0 0 30px; }
+.page-photo { position: relative; padding: 12px; border: 1px solid var(--gold); max-width: 460px; justify-self: center; width: 100%; }
+.page-photo picture, .page-photo img { display: block; width: 100%; height: auto; }
+.page-photo img { aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 15%; }
+
+.prose { max-width: 42rem; }
+.prose p { font-size: 1.08rem; color: #3c3933; }
+.prose p.lead { color: var(--black); }
+.split { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: clamp(32px, 6vw, 80px); align-items: start; }
+.split-aside { position: sticky; top: calc(var(--header-h) + 32px); }
+.split-aside h2 { margin-top: 14px; }
+
+.quote-band { background: var(--black); color: var(--white); text-align: center; }
+.quote-band blockquote { margin: 0 auto; max-width: 48rem; font-family: var(--serif); font-size: clamp(1.6rem, 3.6vw, 2.6rem); line-height: 1.25; }
+.quote-band blockquote em { color: var(--gold); }
+.quote-band cite { display: block; margin-top: 22px; font-style: normal; font-size: 0.74rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
+
+.focus-box {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 18px 22px;
+  align-items: center;
+  margin: 34px 0;
+  padding: 22px 24px;
+  border: 1px solid var(--gold);
+  background: #fffaf0;
+}
+.focus-box strong { font-family: var(--serif); font-size: 2.6rem; font-weight: 400; line-height: 1; color: var(--gold-ink); }
+.focus-box p { margin: 0; color: var(--black); }
+.help-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.help-item { padding: 24px 22px; background: var(--white); border: 1px solid var(--line); display: grid; gap: 10px; align-content: start; }
+.help-item svg { width: 26px; height: 26px; color: var(--gold-ink); }
+.help-item h3 { font-size: 1.25rem; }
+.help-item p { margin: 0; font-size: 0.94rem; color: var(--muted); }
+.motto { font-family: var(--serif); font-size: clamp(1.5rem, 3vw, 2.2rem); line-height: 1.25; color: var(--gold-ink); margin: 30px 0 0; }
+
+.book-detail { display: grid; grid-template-columns: 220px 1fr; gap: clamp(24px, 5vw, 56px); align-items: center; padding-block: 34px; border-top: 1px solid var(--line); }
+.book-detail:last-of-type { border-bottom: 1px solid var(--line); }
+.book-detail .book-cover { max-width: 220px; }
+.book-detail h2 { font-size: clamp(1.8rem, 3.4vw, 2.6rem); margin-bottom: 14px; }
+.book-detail p { margin: 0; font-size: 1.06rem; color: #3c3933; max-width: 38rem; }
+
+.page-section-alt { background: var(--linen); }
+
 @media (max-width: 1080px) {
-  .nav-links { gap: 20px; }
-  .footer-top { grid-template-columns: 1fr 1fr; }
+  .pillar-grid { grid-template-columns: repeat(2, 1fr); }
+  .help-grid { grid-template-columns: repeat(2, 1fr); }
 }
-
-@media (max-width: 960px) {
-  .business-grid { grid-template-columns: 1fr 1fr; }
-  .business-card:last-child { grid-column: 1 / -1; }
-  .business-card:last-child .card-visual { height: 170px; }
-  .booking-grid { grid-template-columns: 1fr; }
-  .booking-copy { position: static; }
-}
-
 @media (max-width: 880px) {
-  :root { --header-h: 70px; }
+  .book-grid { grid-template-columns: 1fr; }
+  .page-hero-grid, .split { grid-template-columns: 1fr; }
+  .split-aside { position: static; }
+  .page-photo { max-width: 420px; }
+}
+@media (max-width: 680px) {
+  .pillar-grid, .help-grid { grid-template-columns: 1fr; }
+  .book { grid-template-columns: 110px 1fr; align-items: start; }
+  .book-detail { grid-template-columns: 1fr; }
+  .book-detail .book-cover { max-width: 180px; }
+  .focus-box { grid-template-columns: 1fr; }
+  .purpose { text-align: left; }
+  .purpose-inner { justify-items: start; }
+}
+
+/* ---------- 15. Responsive ---------- */
+/* Header menu collapses earlier than the rest of the layout, so five links never crowd it. */
+@media (max-width: 1100px) {
   .menu-toggle { display: inline-flex; }
   .nav-menu {
     position: absolute;
@@ -1097,7 +1249,24 @@ em { font-style: italic; }
   .nav-links a { padding: 14px 0; font-size: 0.86rem; border-bottom: 1px solid rgba(232, 216, 176, 0.12); }
   .nav-links a::after { display: none; }
   .nav-menu .btn { width: 100%; }
+}
 
+
+@media (max-width: 1080px) {
+  .nav-links { gap: 20px; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 960px) {
+  .business-grid { grid-template-columns: 1fr 1fr; }
+  .business-card:last-child { grid-column: 1 / -1; }
+  .business-card:last-child .card-visual { height: 170px; }
+  .booking-grid { grid-template-columns: 1fr; }
+  .booking-copy { position: static; }
+}
+
+@media (max-width: 880px) {
+  :root { --header-h: 70px; }
   .hero-grid { grid-template-columns: 1fr; min-height: 0; }
   .hero-art { min-height: 440px; max-width: 460px; width: 100%; justify-self: center; }
   .about-grid { grid-template-columns: 1fr; }
@@ -1162,3 +1331,6 @@ section[tabindex="-1"]:focus, main[tabindex="-1"]:focus { outline: none; }
 @media (max-width: 680px) {
   .toast { bottom: calc(76px + env(safe-area-inset-bottom, 0px)); }
 }
+
+/* Hero headline is three short sentences; keep it a little smaller than a two-line headline. */
+.hero h1.hero-title-long { font-size: clamp(2.7rem, 6vw, 5.4rem); }
