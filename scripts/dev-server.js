@@ -13,6 +13,7 @@ import { createServer } from "node:http";
 import { readFile, stat, mkdir, appendFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { extname, join, normalize, resolve, dirname } from "node:path";
+import { gzipSync } from "node:zlib";
 import { fileURLToPath } from "node:url";
 import { handleEnquiryRequest, configuredChannels } from "../server/enquiry-handler.js";
 
@@ -80,8 +81,17 @@ async function serveStatic(req, res) {
   try {
     const info = await stat(full);
     if (!info.isFile()) return notFound(res);
-    res.writeHead(200, { "Content-Type": TYPES[extname(full).toLowerCase()] || "application/octet-stream", "Cache-Control": "no-cache" });
-    res.end(req.method === "HEAD" ? undefined : await readFile(full));
+    const type = TYPES[extname(full).toLowerCase()] || "application/octet-stream";
+    let body = await readFile(full);
+    const headers = { "Content-Type": type, "Cache-Control": "no-cache" };
+    // Compress text like GitHub Pages and Vercel do, so local speed tests are realistic.
+    if (/text|javascript|json|svg|xml/.test(type) && /\bgzip\b/.test(req.headers["accept-encoding"] || "")) {
+      body = gzipSync(body);
+      headers["Content-Encoding"] = "gzip";
+      headers.Vary = "Accept-Encoding";
+    }
+    res.writeHead(200, headers);
+    res.end(req.method === "HEAD" ? undefined : body);
   } catch {
     notFound(res);
   }

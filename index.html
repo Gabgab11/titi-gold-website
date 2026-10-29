@@ -21,16 +21,22 @@
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 
   <link rel="preload" as="image" type="image/webp" imagesrcset="assets/img/photos/titi-portrait-640.webp 640w, assets/img/photos/titi-portrait-960.webp 960w, assets/img/photos/titi-portrait-1280.webp 1280w" imagesizes="(max-width: 880px) 92vw, 42vw">
-  <link rel="preload" as="image" href="assets/img/brand/foil-texture.jpg">
+  <link rel="preload" as="image" type="image/webp" href="assets/img/brand/foil-texture.webp">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Jost:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="assets/css/styles.css">
+  <!-- Google Fonts load in the background so they never hold up the first paint.
+       The head script below switches this stylesheet on as soon as it arrives. -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Jost:wght@400;500;600&display=swap" media="print" id="webfonts">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Jost:wght@400;500;600&display=swap"></noscript>
+  <link rel="modulepreload" href="assets/js/site-config.js">
+  <link rel="modulepreload" href="assets/js/enquiry-schema.js">
+  <link rel="modulepreload" href="assets/js/enquiry-form.js">
 
   <!-- Runs before first paint: marks JS as available and starts the opening animation.
        INTRO_MODE: "always" = every page load and reload, "session" = once per browser session, "off" = never.
        If you edit this script, update its sha256 hash in vercel.json. -->
-  <script>(function(){var INTRO_MODE="always",d=document.documentElement;d.classList.add("js");try{var still=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches,seen=false;try{seen=sessionStorage.getItem("tg-intro")==="1"}catch(e){}if(INTRO_MODE==="off"||still||(INTRO_MODE==="session"&&seen))return;try{sessionStorage.setItem("tg-intro","1")}catch(e){}d.classList.add("intro-active");if("scrollRestoration"in history)history.scrollRestoration="manual";if(location.hash)history.replaceState(null,"",location.pathname+location.search);var top=function(){window.scrollTo(0,0)};top();document.addEventListener("DOMContentLoaded",top);window.addEventListener("load",top);var done=false,timers=[];function finish(skipped){if(done)return;done=true;timers.forEach(clearTimeout);d.classList.add("intro-reveal");d.classList.remove("intro-active");if(skipped)d.classList.add("intro-skipped");setTimeout(function(){d.classList.remove("intro-skipped","intro-reveal");var el=document.getElementById("intro");if(el)el.remove()},skipped?500:50)}timers.push(setTimeout(function(){d.classList.add("intro-reveal")},4300));timers.push(setTimeout(function(){finish(false)},5050));document.addEventListener("keydown",function(e){if(e.key==="Escape")finish(true)},true);document.addEventListener("click",function(e){if(!done&&e.target.closest&&e.target.closest("#intro"))finish(true)},true)}catch(e){d.classList.remove("intro-active")}})();</script>
+  <script>(function(){var INTRO_MODE="always",d=document.documentElement;d.classList.add("js");var wf=document.getElementById("webfonts");if(wf){if(wf.sheet)wf.media="all";else wf.addEventListener("load",function(){wf.media="all"})}try{var still=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches,seen=false;try{seen=sessionStorage.getItem("tg-intro")==="1"}catch(e){}if(INTRO_MODE==="off"||still||(INTRO_MODE==="session"&&seen))return;try{sessionStorage.setItem("tg-intro","1")}catch(e){}d.classList.add("intro-active");if("scrollRestoration"in history)history.scrollRestoration="manual";if(location.hash)history.replaceState(null,"",location.pathname+location.search);var top=function(){window.scrollTo(0,0)};top();document.addEventListener("DOMContentLoaded",top);window.addEventListener("load",top);var done=false,timers=[];function finish(skipped){if(done)return;done=true;timers.forEach(clearTimeout);d.classList.add("intro-reveal");d.classList.remove("intro-active");if(skipped)d.classList.add("intro-skipped");setTimeout(function(){d.classList.remove("intro-skipped","intro-reveal");var el=document.getElementById("intro");if(el)el.remove()},skipped?500:50)}timers.push(setTimeout(function(){d.classList.add("intro-reveal")},4300));timers.push(setTimeout(function(){finish(false)},5050));document.addEventListener("keydown",function(e){if(e.key==="Escape")finish(true)},true);document.addEventListener("click",function(e){if(!done&&e.target.closest&&e.target.closest("#intro"))finish(true)},true)}catch(e){d.classList.remove("intro-active")}})();</script>
   <script type="module" src="assets/js/main.js"></script>
 
   <script type="application/ld+json">
@@ -85,7 +91,7 @@
             <stop offset=".62" stop-color="#C39434"/><stop offset=".84" stop-color="#EBCD7C"/><stop offset="1" stop-color="#C9A048"/>
           </linearGradient>
           <pattern id="intro-foil" patternUnits="userSpaceOnUse" x="73" y="-20" width="1038" height="1321">
-            <image href="assets/img/brand/foil-texture.jpg" width="1038" height="1321" preserveAspectRatio="none"/>
+            <image href="assets/img/brand/foil-texture.webp" width="1038" height="1321" preserveAspectRatio="none"/>
           </pattern>
           <linearGradient id="intro-shine-fill" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fffbe8" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>

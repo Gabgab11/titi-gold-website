@@ -39,7 +39,7 @@ jobs:
       - name: Version asset links
         run: |
           V="${GITHUB_SHA::8}"
-          sed -i "s#assets/css/styles.css\"#assets/css/styles.css?v=$V\"#g; s#assets/js/main.js\"#assets/js/main.js?v=$V\"#g" _site/index.html _site/404.html
+          sed -i -E "s#(assets/css/styles\.css|assets/js/[a-z-]+\.js)\"#\1?v=$V\"#g" _site/index.html _site/404.html
           sed -i -E "s#from \"\./([a-z-]+)\.js\"#from \"./\1.js?v=$V\"#g" _site/assets/js/*.js
           grep -o 'styles.css?v=[a-f0-9]*' _site/index.html
           grep -ho 'from "[^"]*"' _site/assets/js/*.js
