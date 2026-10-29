@@ -108,6 +108,17 @@ Every time the site is opened or reloaded, it starts at the top with a 5-second 
 
 A gold **back to top** arrow appears in the bottom corner once a visitor scrolls down.
 
+## Scroll effects
+
+Scrolling has its own motion on phones and desktops:
+
+- a thin gold line under the header fills as you move down the page;
+- the gold strip of business names glides sideways and follows your scroll direction;
+- photos move slightly slower than the page for a sense of depth, and the hero text drifts and fades as you leave it;
+- section headings rise line by line, lists cascade in, and the About photo opens with a curtain reveal.
+
+Only transform and opacity change, so it stays smooth on phones. It is switched off for visitors who have "reduce motion" turned on. To adjust how strongly a photo moves, change its `data-parallax` value in `index.html` (for example `0.12`; `0` turns it off).
+
 ## Logo
 
 The TG monogram was redrawn as clean vector geometry, fitted to the original artwork (97.5% overlap — the difference is only the crinkled foil edges). It keeps the original's proportions, including the heavier top of the G and its flat spur.
@@ -149,4 +160,3 @@ brand-kit/                 logo master files (not deployed)
 - **Spam protection**: hidden honeypot field, minimum fill time, per-IP rate limit (5 per 10 minutes, per server instance — add a Vercel Firewall rate-limit rule for stronger protection), size limits, optional origin allow-list.
 - **Performance**: no frameworks, responsive WebP photos with JPEG fallback, preloaded hero image, lazy-loaded below-the-fold images.
 
-Photography: Sirshow.

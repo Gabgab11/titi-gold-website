@@ -385,18 +385,23 @@ em { font-style: italic; }
 .floating-note span { display: block; margin-top: 6px; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
 
 /* ---------- 6. Gold strip ---------- */
-.intro-strip { background: var(--gold); color: var(--black); padding: 18px 0; }
-.strip-inner {
+.intro-strip { background: var(--gold); color: var(--black); padding: 18px 0; overflow: hidden; }
+.strip-track, .strip-run { display: block; }
+.strip-set {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   gap: 10px 28px;
+  width: min(var(--container), 100% - 2 * var(--gutter));
+  margin-inline: auto;
   font-size: 0.76rem;
   font-weight: 600;
   letter-spacing: 0.17em;
   text-transform: uppercase;
+  white-space: nowrap;
 }
+.strip-set > .strip-dot:last-child { display: none; }
 .strip-dot { width: 7px; height: 7px; background: var(--black); transform: rotate(45deg); }
 
 /* ---------- 7. Sections ---------- */
@@ -767,6 +772,125 @@ em { font-style: italic; }
 }
 .js .hero-art[data-hero] { transform: translate3d(0, 0, 0) scale(0.97); }
 @keyframes rise { to { opacity: 1; transform: none; } }
+
+/* ---------- 14b. Scroll effects ----------
+   Turned on by main.js (html.motion-ok) only when the visitor hasn't asked
+   for reduced motion. Everything moves with transform/opacity, so scrolling
+   stays smooth on phones. JS sets these per element:
+     --py        parallax offset in px ([data-parallax])
+     --hero-p    0 → 1 as the hero scrolls away
+   */
+
+/* Progress line under the header */
+.scroll-progress {
+  position: absolute;
+  left: 0; right: 0; bottom: -1px;
+  height: 2px;
+  pointer-events: none;
+  overflow: hidden;
+}
+.scroll-progress span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #a97b25, var(--gold) 40%, #f3db8e 75%, var(--gold));
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
+}
+.intro-active .scroll-progress { display: none; }
+
+/* Gold strip marquee */
+.motion-ok .strip-track { width: max-content; will-change: transform; }
+.motion-ok .strip-run {
+  display: flex;
+  width: max-content;
+  animation: strip-drift var(--strip-speed, 38s) linear infinite;
+}
+.motion-ok .strip-set {
+  flex: none;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  width: auto;
+  margin: 0;
+  padding-right: 28px;
+}
+.motion-ok .strip-set > .strip-dot:last-child { display: block; }
+@keyframes strip-drift { to { transform: translate3d(calc(-1 * var(--set-w, 600px)), 0, 0); } }
+
+/* Hero: text drifts down and fades as you leave, rings rise */
+.motion-ok [data-hero-layer="copy"] {
+  transform: translate3d(0, calc(var(--hero-p, 0) * 110px), 0);
+  opacity: calc(1 - var(--hero-p, 0) * 0.85);
+  will-change: transform, opacity;
+}
+.motion-ok [data-hero-layer="rings"] { transform: translate3d(0, calc(var(--hero-p, 0) * -160px), 0); }
+
+/* Photos move slower than the page inside their frames */
+.motion-ok .portrait img {
+  transform: translate3d(0, var(--py, 0px), 0) scale(1.1);
+  transform-origin: 50% 35%;
+  will-change: transform;
+}
+.motion-ok .about-art-inner img {
+  transform: translate3d(0, var(--py, 0px), 0) scale(1.12);
+  will-change: transform;
+}
+.motion-ok .floating-note { transform: translate3d(0, var(--py, 0px), 0); }
+.motion-ok .card-icon { transform: translate(-50%, calc(-50% + var(--py, 0px))); }
+.motion-ok .booking::after { transform: translate3d(0, var(--py, 0px), 0); }
+
+/* Headings rise line by line from behind a mask */
+.split-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+}
+.split-line > span { display: block; }
+.js.motion-ok [data-reveal] .split-line > span {
+  transform: translate3d(0, 110%, 0);
+  transition: transform 1s var(--ease);
+  transition-delay: calc(var(--reveal-delay, 0s) + 0.12s + var(--line, 0) * 0.12s);
+}
+.js.motion-ok [data-reveal].is-revealed .split-line > span { transform: none; }
+
+/* Lists cascade in */
+.js.motion-ok [data-reveal] [data-stagger] > * {
+  opacity: 0;
+  transform: translate3d(0, 16px, 0);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+  transition-delay: calc(var(--reveal-delay, 0s) + 0.3s + var(--i, 0) * 0.08s);
+}
+.js.motion-ok [data-reveal].is-revealed [data-stagger] > * { opacity: 1; transform: none; }
+
+/* Gold curtain reveal for the About photo */
+.js.motion-ok [data-reveal="mask"] {
+  opacity: 1;
+  transform: none;
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 1.2s cubic-bezier(0.77, 0, 0.18, 1);
+}
+.js.motion-ok [data-reveal="mask"].is-revealed { clip-path: inset(0 0 0 0); }
+.js.motion-ok [data-reveal="mask"] picture {
+  display: block;
+  transform: scale(1.18);
+  transition: transform 1.6s var(--ease);
+}
+.js.motion-ok [data-reveal="mask"].is-revealed picture { transform: none; }
+.js.motion-ok [data-reveal="mask"] .about-art-name,
+.js.motion-ok [data-reveal="mask"] .about-art-role {
+  opacity: 0;
+  transform: translate3d(0, 14px, 0);
+  transition: opacity 0.8s var(--ease) 0.8s, transform 0.8s var(--ease) 0.8s;
+}
+.js.motion-ok [data-reveal="mask"] .about-art-role { transition-delay: 0.95s; }
+.js.motion-ok [data-reveal="mask"].is-revealed .about-art-name,
+.js.motion-ok [data-reveal="mask"].is-revealed .about-art-role { opacity: 1; transform: none; }
+
+/* Cards come in one at a time on phones, so drop the side-by-side delays there */
+@media (max-width: 680px) {
+  .business-card { --reveal-delay: 0s !important; }
+}
 
 /* ---------- 16. Intro (opening animation) ----------
    Timeline, 5 s total:

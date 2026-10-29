@@ -99,15 +99,30 @@ function initReveal() {
     items.forEach((el) => el.classList.add("is-revealed"));
     return;
   }
+  const pending = new Set(items);
+  const reveal = (el) => {
+    el.classList.add("is-revealed");
+    pending.delete(el);
+    observer.unobserve(el);
+  };
   const observer = new IntersectionObserver((entries) => {
-    for (const entry of entries) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("is-revealed");
-        observer.unobserve(entry.target);
-      }
-    }
+    for (const entry of entries) if (entry.isIntersecting) reveal(entry.target);
   }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
   items.forEach((el) => observer.observe(el));
+
+  // A fast swipe or jump can skip right over a section without it ever
+  // "intersecting". Anything that is now above the bottom of the screen is shown.
+  let ticking = false;
+  const sweep = () => {
+    ticking = false;
+    const limit = window.innerHeight;
+    for (const el of pending) if (el.getBoundingClientRect().top < limit) reveal(el);
+    if (!pending.size) window.removeEventListener("scroll", onScroll);
+  };
+  const onScroll = () => {
+    if (!ticking) { ticking = true; requestAnimationFrame(sweep); }
+  };
+  window.addEventListener("scroll", onScroll, { passive: true });
 }
 
 /* ---------- Contact details & social links from site-config.js ---------- */
@@ -214,10 +229,137 @@ function initBackToTop() {
   update();
 }
 
+/* ---------- Scroll effects ----------
+   One requestAnimationFrame per scroll; only transforms and opacity change,
+   so it stays smooth on phones. Skipped entirely for reduced motion. */
+function splitHeadings() {
+  $$("[data-split]").forEach((el) => {
+    const parts = el.innerHTML.split(/<br\s*\/?>/i);
+    el.innerHTML = parts
+      .map((html, i) => `<span class="split-line" style="--line:${i}"><span>${html.trim()}</span></span>`)
+      .join("");
+  });
+}
+
+function indexStaggers() {
+  $$("[data-stagger]").forEach((list) => {
+    [...list.children].forEach((child, i) => child.style.setProperty("--i", i));
+  });
+}
+
+function initMarquee() {
+  const track = $("[data-marquee]");
+  if (!track) return null;
+  const run = $(".strip-run", track);
+  const set = $(".strip-set", run);
+  if (!run || !set) return null;
+  let setWidth = 0;
+
+  const build = () => {
+    run.querySelectorAll(".strip-set:not(:first-child)").forEach((n) => n.remove());
+    setWidth = set.getBoundingClientRect().width;
+    if (!setWidth) return;
+    // Enough copies to cover the screen while drifting and scroll-shifting by two sets.
+    const copies = Math.ceil(window.innerWidth / setWidth) + 3;
+    for (let i = 1; i < copies; i++) run.append(set.cloneNode(true));
+    run.style.setProperty("--set-w", `${setWidth}px`);
+    run.style.setProperty("--strip-speed", `${Math.max(18, setWidth / 22)}s`);
+  };
+  build();
+  return {
+    rebuild: build,
+    update(y) {
+      if (!setWidth) return;
+      const x = -((y * 0.45) % setWidth);
+      track.style.transform = `translate3d(${x.toFixed(1)}px,0,0)`;
+    },
+  };
+}
+
+function initScrollEffects() {
+  if (reducedMotion.matches) return;
+  document.documentElement.classList.add("motion-ok");
+
+  splitHeadings();
+  indexStaggers();
+
+  const bar = $("#scrollProgress");
+  const hero = $(".hero");
+  const marquee = initMarquee();
+  const layers = $$("[data-parallax]").map((el) => ({
+    el,
+    speed: parseFloat(el.dataset.parallax) || 0,
+    // data-parallax-clamp="0.2" limits movement to 20% of the element's height.
+    clamp: el.hasAttribute("data-parallax-clamp") ? (parseFloat(el.dataset.parallaxClamp) || 0.045) : 0,
+    visible: false,
+  }));
+
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        const layer = layers.find((l) => l.el === entry.target);
+        if (layer) layer.visible = entry.isIntersecting;
+      }
+      schedule();
+    }, { rootMargin: "25% 0px 25% 0px" });
+    layers.forEach((l) => io.observe(l.el));
+  } else {
+    layers.forEach((l) => { l.visible = true; });
+  }
+
+  let vh = window.innerHeight;
+  let ticking = false;
+
+  function frame() {
+    ticking = false;
+    const y = window.scrollY;
+    const max = document.documentElement.scrollHeight - vh;
+
+    if (bar) bar.style.transform = `scaleX(${max > 0 ? Math.min(1, y / max).toFixed(4) : 0})`;
+
+    if (hero) {
+      const h = hero.offsetHeight || 1;
+      const p = Math.min(1, Math.max(0, y / h));
+      hero.style.setProperty("--hero-p", p.toFixed(4));
+    }
+
+    marquee?.update(y);
+
+    for (const layer of layers) {
+      if (!layer.visible) continue;
+      const rect = layer.el.getBoundingClientRect();
+      const fromCentre = rect.top + rect.height / 2 - vh / 2;
+      let offset = -fromCentre * layer.speed;
+      if (layer.clamp) {
+        const limit = rect.height * layer.clamp;
+        offset = Math.max(-limit, Math.min(limit, offset));
+      }
+      layer.el.style.setProperty("--py", `${offset.toFixed(1)}px`);
+    }
+  }
+
+  function schedule() {
+    if (!ticking) { ticking = true; requestAnimationFrame(frame); }
+  }
+
+  window.addEventListener("scroll", schedule, { passive: true });
+  let resizeTimer;
+  window.addEventListener("resize", () => {
+    vh = window.innerHeight;
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => { marquee?.rebuild(); schedule(); }, 150);
+    schedule();
+  });
+  // Fonts change text widths; rebuild the strip once they're in.
+  document.fonts?.ready.then(() => { marquee?.rebuild(); schedule(); });
+  schedule();
+}
+
 /* ---------- Boot ---------- */
 initNav();
 initHeader();
 initActiveSection();
+initScrollEffects();
 initReveal();
 initInPageLinks();
 initBackToTop();

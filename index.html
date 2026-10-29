@@ -109,6 +109,7 @@
 
   <!-- ================= HEADER ================= -->
   <header class="site-header" id="siteHeader">
+    <div class="scroll-progress" aria-hidden="true"><span id="scrollProgress"></span></div>
     <div class="container nav">
       <a class="logo" href="#home" aria-label="TITI GOLD home">
         <img class="logo-mark" src="assets/img/brand/titigold-mark.svg" alt="" width="33" height="42">
@@ -135,9 +136,9 @@
   <main id="main" tabindex="-1">
     <!-- ================= HERO ================= -->
     <section class="hero on-dark" id="home" aria-labelledby="hero-title">
-      <div class="hero-rings" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div class="hero-rings" aria-hidden="true" data-hero-layer="rings"><span></span><span></span><span></span></div>
       <div class="container hero-grid">
-        <div class="hero-copy">
+        <div class="hero-copy" data-hero-layer="copy">
           <p class="hero-kicker eyebrow" data-hero style="--d:.05s">A signature of excellence</p>
           <h1 id="hero-title" data-hero style="--d:.15s">Grace in every detail. <em>Gold in every vision.</em></h1>
           <p class="hero-intro" data-hero style="--d:.3s">Welcome to TITI GOLD, where meaningful experiences, community impact and personal style come together under one name.</p>
@@ -154,7 +155,7 @@
 
         <div class="hero-art" data-hero style="--d:.25s">
           <div class="portrait-frame">
-            <div class="portrait">
+            <div class="portrait" data-parallax="0.12" data-parallax-clamp>
               <!-- To change the portrait, replace the files in assets/img/photos/ (keep the same names and 4:5 shape). -->
               <picture>
                 <source type="image/webp" srcset="assets/img/photos/titi-portrait-640.webp 640w, assets/img/photos/titi-portrait-960.webp 960w, assets/img/photos/titi-portrait-1280.webp 1280w" sizes="(max-width: 880px) 92vw, 42vw">
@@ -162,7 +163,7 @@
               </picture>
             </div>
           </div>
-          <div class="floating-note">
+          <div class="floating-note" data-parallax="-0.08">
             <strong>One vision.</strong>
             <span>Three unique expressions</span>
           </div>
@@ -171,10 +172,14 @@
     </section>
 
     <div class="intro-strip" aria-hidden="true">
-      <div class="container strip-inner">
-        <span>Project &amp; Events</span><span class="strip-dot"></span>
-        <span>Purpose &amp; Community</span><span class="strip-dot"></span>
-        <span>Fashion &amp; Style</span>
+      <div class="strip-track" data-marquee>
+        <div class="strip-run">
+          <div class="strip-set">
+            <span>Project &amp; Events</span><span class="strip-dot"></span>
+            <span>Purpose &amp; Community</span><span class="strip-dot"></span>
+            <span>Fashion &amp; Style</span><span class="strip-dot"></span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -184,7 +189,7 @@
         <div class="section-heading" data-reveal>
           <div>
             <p class="eyebrow">The TITI GOLD family</p>
-            <h2 id="businesses-title">Three brands.<br>One golden standard.</h2>
+            <h2 id="businesses-title" data-split>Three brands.<br>One golden standard.</h2>
           </div>
           <p>Explore the business that fits your needs. Each one has its own purpose, and every enquiry goes to the right team.</p>
         </div>
@@ -192,7 +197,7 @@
         <div class="business-grid">
           <!-- 01 · Events -->
           <article class="business-card" id="business-events" aria-labelledby="events-title" data-reveal>
-            <div class="card-visual visual-events" aria-hidden="true">
+            <div class="card-visual visual-events" aria-hidden="true" data-parallax="0.1" data-parallax-clamp="0.16">
               <span class="card-number">01</span>
               <svg class="card-icon"><use href="#icon-events"/></svg>
             </div>
@@ -200,7 +205,7 @@
               <p class="eyebrow">Plan · Create · Celebrate</p>
               <h3 id="events-title">TITIGOLD Project and Event Management</h3>
               <p>Thoughtfully planned events and projects, brought to life with creativity, organisation and attention to detail.</p>
-              <ul class="card-services" aria-label="Services">
+              <ul class="card-services" data-stagger aria-label="Services">
                 <li>Weddings, engagements &amp; celebrations</li>
                 <li>Corporate events, conferences &amp; seminars</li>
                 <li>End-to-end project management</li>
@@ -211,7 +216,7 @@
 
           <!-- 02 · Foundation -->
           <article class="business-card" id="business-foundation" aria-labelledby="foundation-title" data-reveal style="--reveal-delay:.1s">
-            <div class="card-visual visual-foundation" aria-hidden="true">
+            <div class="card-visual visual-foundation" aria-hidden="true" data-parallax="0.1" data-parallax-clamp="0.16">
               <span class="card-number">02</span>
               <svg class="card-icon"><use href="#icon-foundation"/></svg>
             </div>
@@ -219,7 +224,7 @@
               <p class="eyebrow">Purpose · People · Progress</p>
               <h3 id="foundation-title">TITIGOLD Foundation</h3>
               <p>A purpose-led platform for community initiatives and partnerships that make a real difference.</p>
-              <ul class="card-services" aria-label="Ways to get involved">
+              <ul class="card-services" data-stagger aria-label="Ways to get involved">
                 <li>Partnerships &amp; sponsorship</li>
                 <li>Volunteering &amp; donations</li>
                 <li>Community projects</li>
@@ -230,7 +235,7 @@
 
           <!-- 03 · Fashion -->
           <article class="business-card" id="business-fashion" aria-labelledby="fashion-title" data-reveal style="--reveal-delay:.2s">
-            <div class="card-visual visual-fashion" aria-hidden="true">
+            <div class="card-visual visual-fashion" aria-hidden="true" data-parallax="0.1" data-parallax-clamp="0.16">
               <span class="card-number">03</span>
               <svg class="card-icon"><use href="#icon-fashion"/></svg>
             </div>
@@ -238,7 +243,7 @@
               <p class="eyebrow">Discover · Express · Wear</p>
               <h3 id="fashion-title">TITIGOLD Fashion Hub</h3>
               <p>A style destination for discovering fashion, exploring pieces and finding your next look.</p>
-              <ul class="card-services" aria-label="Services">
+              <ul class="card-services" data-stagger aria-label="Services">
                 <li>Product availability &amp; orders</li>
                 <li>Custom pieces &amp; styling</li>
                 <li>Wholesale &amp; partnerships</li>
@@ -253,8 +258,8 @@
     <!-- ================= ABOUT ================= -->
     <section class="section about" id="about" aria-labelledby="about-title">
       <div class="container about-grid">
-        <div class="about-art" data-reveal>
-          <div class="about-art-inner">
+        <div class="about-art" data-reveal="mask">
+          <div class="about-art-inner" data-parallax="0.12" data-parallax-clamp>
             <picture>
               <source type="image/webp" srcset="assets/img/photos/titi-brand-640.webp 640w, assets/img/photos/titi-brand-1000.webp 1000w" sizes="(max-width: 880px) 92vw, 40vw">
               <img src="assets/img/photos/titi-brand-640.jpg" srcset="assets/img/photos/titi-brand-640.jpg 640w, assets/img/photos/titi-brand-1000.jpg 1000w" sizes="(max-width: 880px) 92vw, 40vw" alt="Titi Gold wearing a black T-shirt printed with the gold TG monogram and THE TITI-GOLD wordmark" width="1000" height="1250" loading="lazy" decoding="async">
@@ -265,14 +270,14 @@
         </div>
         <div class="about-copy" data-reveal style="--reveal-delay:.12s">
           <p class="eyebrow">The woman behind the vision</p>
-          <h2 id="about-title">Purposeful work.<br>Beautifully delivered.</h2>
+          <h2 id="about-title" data-split>Purposeful work.<br>Beautifully delivered.</h2>
           <!--
             CONTENT: replace the two paragraphs below with Titi's approved biography,
             professional achievements and personal message.
           -->
           <p>TITI GOLD brings together a passion for creating memorable experiences, supporting meaningful causes and celebrating personal expression.</p>
           <p>Each of the three businesses is run with the same care for detail and for the people it serves.</p>
-          <div class="about-stats">
+          <div class="about-stats" data-stagger>
             <div class="stat"><strong>Events</strong><span>Ideas into experiences</span></div>
             <div class="stat"><strong>Impact</strong><span>Purpose into action</span></div>
             <div class="stat"><strong>Style</strong><span>Expression with confidence</span></div>
@@ -282,11 +287,11 @@
     </section>
 
     <!-- ================= ENQUIRY ================= -->
-    <section class="section booking on-dark" id="enquire" aria-labelledby="enquire-title">
+    <section class="section booking on-dark" id="enquire" aria-labelledby="enquire-title" data-parallax="-0.18">
       <div class="container booking-grid">
         <div class="booking-copy" data-reveal>
           <p class="eyebrow">Start a conversation</p>
-          <h2 id="enquire-title">Let's make something meaningful.</h2>
+          <h2 id="enquire-title" data-split>Let's make something meaningful.</h2>
           <p>Tell us what you're looking for. Your enquiry is labelled for the right TITI GOLD business, so it reaches the people who can help.</p>
           <p class="booking-note">Every great collaboration starts with a conversation.</p>
           <!-- Filled from assets/js/site-config.js; stays hidden until details are added there. -->
@@ -300,7 +305,7 @@
           <form id="enquiryForm" action="/api/enquiry" method="post" novalidate>
             <fieldset class="business-picker">
               <legend>I'm enquiring about <span class="req" aria-hidden="true">*</span></legend>
-              <div class="picker-options">
+              <div class="picker-options" data-stagger>
                 <div class="picker-option">
                   <input type="radio" id="biz-events" name="business" value="events" checked>
                   <label for="biz-events"><svg aria-hidden="true"><use href="#icon-events"/></svg><span><strong>Project &amp; Event Management</strong><small>Events and projects</small></span></label>
@@ -437,7 +442,7 @@
     <!-- ================= CTA BAND ================= -->
     <section class="contact-band" aria-labelledby="cta-title">
       <div class="container contact-inner" data-reveal>
-        <h2 id="cta-title">Have a vision in mind?<br>Let's bring it to life.</h2>
+        <h2 id="cta-title" data-split>Have a vision in mind?<br>Let's bring it to life.</h2>
         <a class="btn" href="#enquire">Make an enquiry <svg aria-hidden="true"><use href="#icon-arrow-up-right"/></svg></a>
       </div>
     </section>
@@ -482,7 +487,6 @@
       </div>
       <div class="footer-bottom">
         <span>© <span id="year">2026</span> TITI GOLD. All rights reserved.</span>
-        <span>Portraits by Sirshow</span>
       </div>
     </div>
   </footer>
