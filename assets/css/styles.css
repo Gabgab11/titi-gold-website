@@ -1122,6 +1122,9 @@ em { font-style: italic; }
   pointer-events: none;
 }
 .book:hover .book-cover { transform: translateY(-4px) rotate(-1deg); }
+.book-cover--image { display: block; aspect-ratio: auto; padding: 0; background: none; box-shadow: 0 18px 30px rgba(21, 21, 21, 0.22); }
+.book-cover--image::before { display: none; }
+.book-cover--image picture, .book-cover--image img { display: block; width: 100%; height: auto; }
 .book-cover-title { font-family: var(--serif); font-size: clamp(1rem, 1.7vw, 1.3rem); line-height: 1.15; color: var(--gold); }
 .book-cover-title small { display: block; margin-top: 6px; font-size: 0.7em; color: var(--champagne); }
 .book-cover-author { font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase; }
