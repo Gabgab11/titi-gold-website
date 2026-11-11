@@ -2,7 +2,7 @@
 
 The website for **TITIGOLD Project and Event Management**, **TITIGOLD Foundation** and **TITIGOLD Fashion Hub**.
 
-**Live site:** https://gabgab11.github.io/titi-gold-website/ (GitHub Pages)
+**Live site:** https://titiigold.com/ (GitHub Pages; also https://gabgab11.github.io/titi-gold-website/)
 
 A fast, dependency-free static site with a smart enquiry form and a small server function that delivers enquiries by **email (Resend)** and/or saves them to a **database (Supabase)**.
 
