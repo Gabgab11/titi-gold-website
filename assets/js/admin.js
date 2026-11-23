@@ -652,4 +652,27 @@ $("inviteForm").addEventListener("submit", async (e) => {
   }
 });
 
+// ---- Share a link (no email) ----
+$("makeLink").addEventListener("click", async () => {
+  const email = $("inviteEmail").value.trim();
+  if (!email) return setMsg($("teamMsg"), "Type the person's email address first.");
+  try {
+    const r = await callTeam({ action: "link", email });
+    $("linkUrl").value = r.link;
+    $("linkBox").hidden = false;
+    setMsg($("teamMsg"), r.kind === "reset" ? "Here is a password-reset link for " + email + "." : "Here is an invite link for " + email + ".", true);
+    loadTeam();
+  } catch (err) {
+    setMsg($("teamMsg"), err.message);
+  }
+});
+
+$("copyInviteLink").addEventListener("click", async () => {
+  $("linkUrl").select();
+  try {
+    await navigator.clipboard.writeText($("linkUrl").value);
+    $("copyInviteLink").textContent = "Link copied";
+  } catch {}
+});
+
 init();

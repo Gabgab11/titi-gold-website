@@ -57,6 +57,20 @@ Deno.serve(async (req) => {
     return json({ ok: true, message: "Invite sent to " + email + "." });
   }
 
+  if (action === "link") {
+    // Make a link to share directly, without sending an email.
+    // New people get an invite link; people who already have a sign-in get a password-reset link.
+    await admin.from("admins").upsert({ email });
+    let kind = "invite";
+    let result = await admin.auth.admin.generateLink({ type: "invite", email, options: { redirectTo: SITE + "/admin" } });
+    if (result.error) {
+      kind = "reset";
+      result = await admin.auth.admin.generateLink({ type: "recovery", email, options: { redirectTo: SITE + "/admin" } });
+    }
+    if (result.error || !result.data?.properties?.action_link) return json({ error: "The link could not be made. " + (result.error?.message ?? "") }, 500);
+    return json({ ok: true, kind, link: result.data.properties.action_link });
+  }
+
   if (action === "remove") {
     const { data: me } = await caller.auth.getUser();
     if (me.user?.email?.toLowerCase() === email) return json({ error: "You cannot remove yourself." }, 400);
