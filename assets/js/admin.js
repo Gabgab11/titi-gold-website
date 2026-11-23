@@ -228,4 +228,109 @@ $("copyLink").addEventListener("click", async () => {
   }
 });
 
+
+// ---- Tabs ----
+function showTab(name) {
+  $("blogPanel").hidden = name !== "blog";
+  $("booksPanel").hidden = name !== "books";
+  document.querySelectorAll(".admin-tab").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.tab === name)));
+  if (name === "books") loadBooks();
+}
+document.querySelectorAll(".admin-tab").forEach((b) => b.addEventListener("click", () => showTab(b.dataset.tab)));
+
+// ---- Books ----
+let currentBookId = null;
+let bookCoverUrl = null;
+
+async function loadBooks() {
+  const { data, error } = await sb.from("books").select("id,title,status,sort_order").order("sort_order", { ascending: true });
+  const list = $("bookList");
+  list.replaceChildren();
+  if (error) return setMsg($("bookMsg"), "Books could not be loaded: " + error.message);
+  for (const b of data) {
+    const li = document.createElement("li");
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.setAttribute("aria-current", String(b.id === currentBookId));
+    btn.textContent = `${b.title || "Untitled"} (${b.status === "published" ? "shown" : "hidden"})`;
+    btn.addEventListener("click", () => loadBook(b.id));
+    li.append(btn);
+    list.append(li);
+  }
+}
+
+function fillBook(b) {
+  currentBookId = b?.id || null;
+  bookCoverUrl = b?.cover_url || null;
+  $("bookId").value = b?.id || "";
+  $("bookTitle").value = b?.title || "";
+  $("bookSubtitle").value = b?.subtitle || "";
+  $("bookDesc").value = b?.description || "";
+  $("bookBuy").value = b?.buy_url || "";
+  $("bookOrder").value = b?.sort_order ?? 0;
+  $("bookStatus").value = b?.status || "draft";
+  $("bookCoverName").textContent = bookCoverUrl ? "Cover picture added" : "";
+  $("deleteBook").hidden = !b;
+  setMsg($("bookMsg"), "");
+}
+
+async function loadBook(id) {
+  const { data, error } = await sb.from("books").select("*").eq("id", id).single();
+  if (error) return setMsg($("bookMsg"), "That book could not be opened.");
+  fillBook(data);
+  loadBooks();
+}
+
+$("newBook").addEventListener("click", () => { fillBook(null); loadBooks(); });
+
+$("saveBook").addEventListener("click", async () => {
+  const title = $("bookTitle").value.trim();
+  if (!title) return setMsg($("bookMsg"), "Please add a title.");
+  const row = {
+    title,
+    subtitle: $("bookSubtitle").value.trim(),
+    description: $("bookDesc").value.trim(),
+    buy_url: $("bookBuy").value.trim() || null,
+    sort_order: Number($("bookOrder").value) || 0,
+    status: $("bookStatus").value,
+    cover_url: bookCoverUrl,
+    updated_at: new Date().toISOString(),
+  };
+  let result;
+  if (currentBookId) {
+    result = await sb.from("books").update(row).eq("id", currentBookId).select().single();
+  } else {
+    row.slug = slugify(title) || "book-" + Date.now();
+    result = await sb.from("books").insert(row).select().single();
+  }
+  if (result.error) return setMsg($("bookMsg"), "The book could not be saved. " + result.error.message);
+  fillBook(result.data);
+  loadBooks();
+  setMsg($("bookMsg"), row.status === "published" ? "Saved. It is shown on the website." : "Saved. It is hidden until you choose to show it.", true);
+});
+
+$("deleteBook").addEventListener("click", async () => {
+  if (!currentBookId) return;
+  if (!confirm("Delete this book permanently? This cannot be undone.")) return;
+  const { error } = await sb.from("books").delete().eq("id", currentBookId);
+  if (error) return setMsg($("bookMsg"), "The book could not be deleted. " + error.message);
+  fillBook(null);
+  loadBooks();
+  setMsg($("bookMsg"), "The book was deleted.", true);
+});
+
+$("bookCover").addEventListener("change", async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  setMsg($("bookMsg"), "Uploading cover…");
+  try {
+    bookCoverUrl = await upload(file);
+    $("bookCoverName").textContent = "Cover picture added: " + file.name;
+    setMsg($("bookMsg"), "Cover added. Save the book to keep it.", true);
+  } catch (err) {
+    setMsg($("bookMsg"), "The cover could not be uploaded. " + err.message);
+  }
+  e.target.value = "";
+});
+
 init();

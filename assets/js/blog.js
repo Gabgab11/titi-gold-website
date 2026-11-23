@@ -93,3 +93,28 @@ const list = document.querySelector("[data-blog-list]");
 if (list) showList(list);
 const post = document.querySelector("[data-post]");
 if (post) showPost(post);
+
+// Books: the Books page lists published books from the database.
+async function showBooks(container) {
+  const { data, error } = await sb
+    .from("books")
+    .select("title,subtitle,description,cover_url,buy_url")
+    .eq("status", "published")
+    .order("sort_order", { ascending: true });
+  if (error || !data || !data.length) return; // keep the built-in list if nothing is available
+  container.innerHTML = data
+    .map(
+      (b) => `<article class="book-detail">
+        ${b.cover_url ? `<div class="book-cover book-cover--image"><img src="${esc(b.cover_url)}" width="640" height="951" loading="lazy" decoding="async" alt="Cover of ${esc(b.title)}"></div>` : ""}
+        <div>
+          ${b.subtitle ? `<p class="eyebrow">${esc(b.subtitle)}</p>` : ""}
+          <h2>${esc(b.title)}</h2>
+          ${b.description ? `<p>${esc(b.description)}</p>` : ""}
+          ${b.buy_url ? `<p><a class="text-link" href="${esc(b.buy_url)}" target="_blank" rel="noopener">Get a copy <svg aria-hidden="true"><use href="#icon-arrow-up-right"/></svg></a></p>` : ""}
+        </div>
+      </article>`
+    )
+    .join("");
+}
+const booksBox = document.querySelector("[data-books-list]");
+if (booksBox) showBooks(booksBox);

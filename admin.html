@@ -105,10 +105,11 @@
 
         <div id="editorPanel" hidden>
           <div class="admin-top">
-            <h1>Blog</h1>
+            <h1>Admin</h1>
+            <nav class="admin-tabs" aria-label="Sections"><button type="button" class="admin-tab" data-tab="blog" aria-pressed="true">Blog</button><button type="button" class="admin-tab" data-tab="books" aria-pressed="false">Books</button></nav>
             <div class="admin-row"><span id="whoami" class="muted"></span><button class="btn-ghost" type="button" id="signOut">Sign out</button></div>
           </div>
-          <div class="admin-grid">
+          <div id="blogPanel"><div class="admin-grid">
             <aside>
               <button class="btn" type="button" id="newPost">New post</button>
               <ul class="admin-list" id="postList"></ul>
@@ -150,6 +151,34 @@
                 </div>
               </div>
             </form>
+          </div></div>
+          <div id="booksPanel" hidden>
+            <div class="admin-grid">
+              <aside>
+                <button class="btn" type="button" id="newBook">New book</button>
+                <ul class="admin-list" id="bookList"></ul>
+              </aside>
+              <form id="bookForm" class="admin-form" novalidate>
+                <input type="hidden" id="bookId">
+                <label>Title <input id="bookTitle" required maxlength="200"></label>
+                <label>Subtitle <input id="bookSubtitle" maxlength="200"></label>
+                <label>About the book <textarea id="bookDesc" rows="6" maxlength="2000"></textarea></label>
+                <label>Where to buy (link) <input id="bookBuy" type="url" maxlength="500" placeholder="https://"></label>
+                <label>Order on the page (1 is first) <input id="bookOrder" type="number" min="0" value="0"></label>
+                <label>Shown on the website?
+                  <select id="bookStatus"><option value="draft">No, keep hidden</option><option value="published">Yes, show it</option></select>
+                </label>
+                <div class="admin-row">
+                  <label class="btn-ghost">Cover picture<input type="file" id="bookCover" accept="image/*" hidden></label>
+                  <span id="bookCoverName" class="muted"></span>
+                </div>
+                <div class="admin-row">
+                  <button class="btn" type="button" id="saveBook">Save book</button>
+                  <button class="btn-ghost danger" type="button" id="deleteBook" hidden>Delete book</button>
+                </div>
+                <p id="bookMsg" class="admin-msg" role="status" aria-live="polite"></p>
+              </form>
+            </div>
           </div>
         </div>
       </div>
