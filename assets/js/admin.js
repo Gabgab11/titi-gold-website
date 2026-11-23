@@ -40,14 +40,34 @@ async function init() {
   showEditor(session.user.email);
 }
 
+let pendingEmail = "";
+
 $("loginForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   const email = $("loginEmail").value.trim();
-  const { error } = await sb.auth.signInWithOtp({
-    email,
-    options: { emailRedirectTo: location.origin + location.pathname },
-  });
-  setMsg($("loginMsg"), error ? "The sign-in link could not be sent. Check the email address and try again." : "Check your inbox for the sign-in link.", !error);
+  const { error } = await sb.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
+  if (error) return setMsg($("loginMsg"), "The code could not be sent. Check the email address and try again.");
+  pendingEmail = email;
+  $("codeEmail").textContent = email;
+  setMsg($("codeMsg"), "");
+  $("loginForm").hidden = true;
+  $("codeForm").hidden = false;
+  $("loginCode").focus();
+});
+
+$("codeForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const token = $("loginCode").value.replace(/\s/g, "");
+  const { error } = await sb.auth.verifyOtp({ email: pendingEmail, token, type: "email" });
+  if (error) return setMsg($("codeMsg"), "That code is not right or has expired. Please try again or request a new one.");
+  setMsg($("codeMsg"), "");
+  init();
+});
+
+$("codeBack").addEventListener("click", () => {
+  $("codeForm").hidden = true;
+  $("loginForm").hidden = false;
+  setMsg($("loginMsg"), "");
 });
 
 $("signOut").addEventListener("click", async () => {

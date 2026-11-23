@@ -98,6 +98,17 @@
             <div class="admin-row"><button class="btn" type="submit">Email me a sign-in link</button></div>
             <p id="loginMsg" class="admin-msg" role="status" aria-live="polite"></p>
           </form>
+          <form id="codeForm" class="admin-form" hidden>
+            <p>We emailed a 6-digit code to <strong id="codeEmail"></strong>. Type it below.</p>
+            <label>Code
+              <input id="loginCode" inputmode="numeric" autocomplete="one-time-code" maxlength="8" required>
+            </label>
+            <div class="admin-row">
+              <button class="btn" type="submit">Sign in</button>
+              <button class="btn-ghost" type="button" id="codeBack">Use a different email</button>
+            </div>
+            <p id="codeMsg" class="admin-msg" role="status" aria-live="polite"></p>
+          </form>
         </div>
 
         <div id="editorPanel" hidden>
