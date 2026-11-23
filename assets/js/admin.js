@@ -4,6 +4,8 @@ import { SUPABASE_URL, SUPABASE_KEY, SITE_URL } from "./supabase-config.js";
 import { editableTexts, editableImages, DEFAULT_THEME } from "./editable.js";
 
 const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+// An invite or password-reset link brings the person here with a token in the address.
+let inviteFlow = /type=(invite|recovery)/.test(location.hash);
 const $ = (id) => document.getElementById(id);
 
 let currentId = null;
@@ -33,6 +35,7 @@ function showEditor(email) {
 async function init() {
   const { data: { session } } = await sb.auth.getSession();
   if (!session) return showLogin();
+  if (inviteFlow) return showSetPassword();
   const { data: isAdmin, error } = await sb.rpc("is_admin");
   if (error || !isAdmin) {
     await sb.auth.signOut();
@@ -240,6 +243,8 @@ function showTab(name) {
   if (name === "books") loadBooks();
   if (name === "pages") loadPage($("pageSelect").value);
   if (name === "theme") loadTheme();
+  if (name === "team") loadTeam();
+  $("teamPanel").hidden = name !== "team";
 }
 document.querySelectorAll(".admin-tab").forEach((b) => b.addEventListener("click", () => showTab(b.dataset.tab)));
 
@@ -555,6 +560,96 @@ $("publishSite").addEventListener("click", async () => {
   const { error } = await sb.rpc("publish_site_content");
   if (error) return setMsg($("siteMsg"), "Could not publish. " + error.message);
   setMsg($("siteMsg"), "Published. The website now shows your latest changes.", true);
+});
+
+// ---- Invites and passwords ----
+function showSetPassword() {
+  $("authPanel").hidden = true;
+  $("editorPanel").hidden = true;
+  $("setPasswordPanel").hidden = false;
+}
+
+$("setPasswordForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const password = $("newPassword").value;
+  if (password.length < 8) return setMsg($("setPasswordMsg"), "Please use at least 8 characters.");
+  const { error } = await sb.auth.updateUser({ password });
+  if (error) return setMsg($("setPasswordMsg"), "The password could not be saved. " + error.message);
+  inviteFlow = false;
+  history.replaceState(null, "", location.pathname);
+  $("newPassword").value = "";
+  $("setPasswordPanel").hidden = true;
+  init();
+});
+
+$("forgotPassword").addEventListener("click", async () => {
+  const email = $("loginEmail").value.trim();
+  if (!email) return setMsg($("loginMsg"), "Type your email address above first, then press Forgot password.");
+  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: SITE_URL + "/admin.html" });
+  setMsg($("loginMsg"), error ? "The email could not be sent. " + error.message : "If that email has an account, a link to choose a new password is on its way.", !error);
+});
+
+// ---- Team ----
+async function callTeam(body) {
+  const { data, error } = await sb.functions.invoke("invite-admin", { body });
+  if (error) {
+    let message = error.message;
+    try { message = (await error.context.json()).error || message; } catch {}
+    throw new Error(message);
+  }
+  return data;
+}
+
+async function loadTeam() {
+  const list = $("teamList");
+  list.replaceChildren();
+  try {
+    const { admins } = await callTeam({ action: "list" });
+    const me = (await sb.auth.getUser()).data.user?.email?.toLowerCase();
+    for (const email of admins) {
+      const li = document.createElement("li");
+      const name = document.createElement("span");
+      name.textContent = email + (email === me ? " (you)" : "");
+      li.append(name);
+      if (email !== me) {
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.className = "btn-ghost danger";
+        remove.textContent = "Remove";
+        remove.addEventListener("click", async () => {
+          if (!confirm(`Remove ${email}? They will no longer be able to sign in to the admin page.`)) return;
+          try {
+            const r = await callTeam({ action: "remove", email });
+            setMsg($("teamMsg"), r.message, true);
+            loadTeam();
+          } catch (err) {
+            setMsg($("teamMsg"), err.message);
+          }
+        });
+        li.append(remove);
+      }
+      list.append(li);
+    }
+  } catch (err) {
+    setMsg($("teamMsg"), "The team could not be loaded. " + err.message);
+  }
+}
+
+$("inviteForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const email = $("inviteEmail").value.trim();
+  if (!email) return setMsg($("teamMsg"), "Please type the email address to invite.");
+  $("sendInvite").disabled = true;
+  try {
+    const r = await callTeam({ action: "invite", email });
+    setMsg($("teamMsg"), r.message, true);
+    $("inviteEmail").value = "";
+    loadTeam();
+  } catch (err) {
+    setMsg($("teamMsg"), err.message);
+  } finally {
+    $("sendInvite").disabled = false;
+  }
 });
 
 init();

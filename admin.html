@@ -98,15 +98,28 @@
             <label>Password
               <input type="password" id="loginPassword" required autocomplete="current-password">
             </label>
-            <div class="admin-row"><button class="btn" type="submit">Sign in</button></div>
+            <div class="admin-row"><button class="btn" type="submit">Sign in</button><button class="btn-ghost" type="button" id="forgotPassword">Forgot password?</button></div>
             <p id="loginMsg" class="admin-msg" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+
+        <div id="setPasswordPanel" hidden>
+          <p class="eyebrow">Admin</p>
+          <h1>Choose your password</h1>
+          <p class="muted">Welcome to the Titi Gold admin page. Choose a password to finish setting up your account.</p>
+          <form id="setPasswordForm" class="admin-form">
+            <label>New password (at least 8 characters)
+              <input type="password" id="newPassword" required minlength="8" autocomplete="new-password">
+            </label>
+            <div class="admin-row"><button class="btn" type="submit">Save password and continue</button></div>
+            <p id="setPasswordMsg" class="admin-msg" role="status" aria-live="polite"></p>
           </form>
         </div>
 
         <div id="editorPanel" hidden>
           <div class="admin-top">
             <h1>Admin</h1>
-            <nav class="admin-tabs" aria-label="Sections"><button type="button" class="admin-tab" data-tab="blog" aria-pressed="true">Blog</button><button type="button" class="admin-tab" data-tab="books" aria-pressed="false">Books</button><button type="button" class="admin-tab" data-tab="pages" aria-pressed="false">Website pages</button><button type="button" class="admin-tab" data-tab="theme" aria-pressed="false">Colours</button></nav>
+            <nav class="admin-tabs" aria-label="Sections"><button type="button" class="admin-tab" data-tab="blog" aria-pressed="true">Blog</button><button type="button" class="admin-tab" data-tab="books" aria-pressed="false">Books</button><button type="button" class="admin-tab" data-tab="pages" aria-pressed="false">Website pages</button><button type="button" class="admin-tab" data-tab="theme" aria-pressed="false">Colours</button><button type="button" class="admin-tab" data-tab="team" aria-pressed="false">Team</button></nav>
             <div class="admin-row"><button class="btn" type="button" id="publishSite">Publish website changes</button><span id="whoami" class="muted"></span><button class="btn-ghost" type="button" id="signOut">Sign out</button></div>
           </div>
           <p id="siteMsg" class="admin-msg" role="status" aria-live="polite"></p>
@@ -176,6 +189,18 @@
               <button class="btn" type="button" id="saveTheme">Save colours</button>
               <button class="btn-ghost" type="button" id="resetTheme">Use the original colours</button>
             </div>
+          </div>
+          <div id="teamPanel" hidden>
+            <p class="muted">Invite someone to help manage the website. They get an email, choose a password, and can then sign in here.</p>
+            <form id="inviteForm" class="admin-form admin-stack" novalidate>
+              <label>Email address of the person to invite
+                <input type="email" id="inviteEmail" required autocomplete="off">
+              </label>
+              <div class="admin-row"><button class="btn" type="submit" id="sendInvite">Send invite</button></div>
+              <p id="teamMsg" class="admin-msg" role="status" aria-live="polite"></p>
+            </form>
+            <h2 class="admin-stack">Current team</h2>
+            <ul class="admin-list" id="teamList"></ul>
           </div>
           <div id="booksPanel" hidden>
             <div class="admin-grid">
