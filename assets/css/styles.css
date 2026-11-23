@@ -1387,3 +1387,11 @@ section[tabindex="-1"]:focus, main[tabindex="-1"]:focus { outline: none; }
 .page-item img { width: 180px; height: auto; display: block; }
 .color-field { display: flex; align-items: center; gap: 12px; }
 .color-field input[type="color"] { width: 56px; height: 44px; padding: 0; border: 1px solid #cfc8b8; background: none; }
+.theme-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin: 18px 0; }
+.theme-card { display: grid; gap: 6px; text-align: left; font: inherit; color: inherit; background: #fff; border: 1px solid #cfc8b8; padding: 16px; min-height: 44px; cursor: pointer; }
+.theme-card.selected { border: 2px solid #151515; padding: 15px; }
+.theme-card strong { font-weight: 600; }
+.theme-swatches { display: flex; margin-bottom: 6px; }
+.theme-swatches i { display: block; width: 36px; height: 28px; }
+.theme-custom { margin: 12px 0 18px; }
+.theme-custom summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; }

@@ -120,7 +120,7 @@
         <div id="editorPanel" hidden>
           <div class="admin-top">
             <h1>Admin</h1>
-            <nav class="admin-tabs" aria-label="Sections"><button type="button" class="admin-tab" data-tab="blog" aria-pressed="true">TITIGOLD SPEAKS</button><button type="button" class="admin-tab" data-tab="books" aria-pressed="false">Books</button><button type="button" class="admin-tab" data-tab="pages" aria-pressed="false">Website pages</button><button type="button" class="admin-tab" data-tab="theme" aria-pressed="false">Colours</button><button type="button" class="admin-tab" data-tab="team" aria-pressed="false">Team</button></nav>
+            <nav class="admin-tabs" aria-label="Sections"><button type="button" class="admin-tab" data-tab="blog" aria-pressed="true">TITIGOLD SPEAKS</button><button type="button" class="admin-tab" data-tab="books" aria-pressed="false">Books</button><button type="button" class="admin-tab" data-tab="pages" aria-pressed="false">Website pages</button><button type="button" class="admin-tab" data-tab="theme" aria-pressed="false">Themes</button><button type="button" class="admin-tab" data-tab="team" aria-pressed="false">Team</button></nav>
             <div class="admin-row"><button class="btn" type="button" id="publishSite">Publish website changes</button><span id="whoami" class="muted"></span><button class="btn-ghost" type="button" id="signOut">Sign out</button></div>
           </div>
           <p id="siteMsg" class="admin-msg" role="status" aria-live="polite"></p>
@@ -184,11 +184,15 @@
             <div class="admin-row admin-stack"><button class="btn" type="button" id="savePage">Save changes</button></div>
           </div>
           <div id="themePanel" hidden>
-            <p class="muted">Choose the website colours. Press Save colours, then Publish website changes at the top.</p>
-            <div id="themeFields" class="admin-form admin-stack"></div>
+            <p class="muted">Pick a season to change the colours of the whole website. Your choice shows on this page first. Press Save theme, then Publish website changes at the top to show it on the live site.</p>
+            <div id="themeCards" class="theme-cards"></div>
+            <details class="theme-custom">
+              <summary>Adjust individual colours</summary>
+              <div id="themeFields" class="admin-form admin-stack"></div>
+            </details>
             <div class="admin-row admin-stack">
-              <button class="btn" type="button" id="saveTheme">Save colours</button>
-              <button class="btn-ghost" type="button" id="resetTheme">Use the original colours</button>
+              <button class="btn" type="button" id="saveTheme">Save theme</button>
+              <button class="btn-ghost" type="button" id="resetTheme">Back to the original gold</button>
             </div>
           </div>
           <div id="teamPanel" hidden>

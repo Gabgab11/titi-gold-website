@@ -139,7 +139,7 @@ function collect(status) {
 }
 
 // Set to false when posting should be allowed again.
-const POSTING_PAUSED = true;
+const POSTING_PAUSED = false;
 
 async function save(status) {
   if (POSTING_PAUSED) return setMsg($("formMsg"), "Posting is paused for now. Please try again later.");
@@ -515,24 +515,87 @@ $("pageSelect").addEventListener("change", (e) => {
 });
 $("savePage").addEventListener("click", savePending);
 
+// Whole-site seasonal themes. Each one sets all of the site's main colours.
+const THEMES = {
+  gold: { name: "Original gold", note: "The website as it was designed.", colours: { ...DEFAULT_THEME } },
+  spring: { name: "Spring", note: "Fresh greens and soft cream.", colours: { "--black": "#22301f", "--gold": "#8fb36b", "--gold-ink": "#4f6b35", "--ivory": "#f8faf3", "--champagne": "#d9e8c5", "--linen": "#eef3e6", "--muted": "#55604d" } },
+  summer: { name: "Summer", note: "Sea blue, sunshine and warm sand.", colours: { "--black": "#1d3340", "--gold": "#e0a458", "--gold-ink": "#9a5f14", "--ivory": "#fdf9f1", "--champagne": "#f6dfb8", "--linen": "#f3ecdc", "--muted": "#5a5a57" } },
+  autumn: { name: "Autumn", note: "Rust, amber and warm earth.", colours: { "--black": "#2e1a12", "--gold": "#b8662e", "--gold-ink": "#8a4417", "--ivory": "#faf3ea", "--champagne": "#ecd3b0", "--linen": "#f1e4d2", "--muted": "#61503f" } },
+  winter: { name: "Winter", note: "Icy blue and soft silver.", colours: { "--black": "#142030", "--gold": "#9fb6cf", "--gold-ink": "#3e5a78", "--ivory": "#f5f8fb", "--champagne": "#d6e2ee", "--linen": "#e8eef5", "--muted": "#4c5866" } },
+  festive: { name: "Festive", note: "Deep green, red and gold for the holidays.", colours: { "--black": "#1b1f1a", "--gold": "#c6a04a", "--gold-ink": "#6b1d1d", "--ivory": "#fbf7f0", "--champagne": "#e8d8b0", "--linen": "#f2ebdc", "--muted": "#4f4a44" } },
+};
+
+let selectedKey = "gold";
+let current = { ...DEFAULT_THEME };
+
+function previewTheme(values) {
+  for (const [name, value] of Object.entries(values)) {
+    document.documentElement.style.setProperty(name, value);
+  }
+}
+
+function renderCards() {
+  const box = $("themeCards");
+  box.replaceChildren();
+  for (const [key, t] of Object.entries(THEMES)) {
+    const selected = selectedKey === key;
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "theme-card" + (selected ? " selected" : "");
+    b.setAttribute("aria-pressed", selected ? "true" : "false");
+    const swatches = document.createElement("span");
+    swatches.className = "theme-swatches";
+    for (const name of ["--black", "--gold", "--ivory", "--champagne"]) {
+      const dot = document.createElement("i");
+      dot.style.background = t.colours[name];
+      swatches.append(dot);
+    }
+    const title = document.createElement("strong");
+    title.textContent = t.name;
+    const note = document.createElement("span");
+    note.className = "muted";
+    note.textContent = t.note;
+    b.append(swatches, title, note);
+    b.addEventListener("click", () => chooseTheme(key, t.colours));
+    box.append(b);
+  }
+}
+
+function chooseTheme(key, values) {
+  selectedKey = key;
+  current = { ...DEFAULT_THEME, ...values };
+  previewTheme(current);
+  renderCards();
+  fillThemeFields(current);
+}
+
 function loadTheme() {
   loadSiteRows().then((ok) => {
     if (!ok) return;
-    const saved = parseJSON(savedValue("theme")) || {};
-    fillThemeFields({ ...DEFAULT_THEME, ...saved });
+    const saved = { ...DEFAULT_THEME, ...(parseJSON(savedValue("theme")) || {}) };
+    const match = Object.entries(THEMES).find(([, t]) =>
+      Object.keys(DEFAULT_THEME).every((n) => t.colours[n] === saved[n])
+    );
+    chooseTheme(match ? match[0] : "custom", saved);
   });
 }
 
 function fillThemeFields(values) {
   const box = $("themeFields");
   box.replaceChildren();
-  for (const [name, value] of Object.entries(DEFAULT_THEME)) {
+  for (const name of Object.keys(DEFAULT_THEME)) {
     const row = document.createElement("label");
     row.className = "color-field";
     const input = document.createElement("input");
     input.type = "color";
     input.value = values[name];
     input.dataset.name = name;
+    input.addEventListener("input", () => {
+      current[name] = input.value;
+      selectedKey = "custom";
+      previewTheme({ [name]: input.value });
+      renderCards();
+    });
     const text = document.createElement("span");
     text.textContent = THEME_LABELS[name] || name;
     row.append(input, text);
@@ -551,13 +614,11 @@ const THEME_LABELS = {
 };
 
 $("saveTheme").addEventListener("click", () => {
-  const values = {};
-  document.querySelectorAll("#themeFields input[type=color]").forEach((i) => (values[i.dataset.name] = i.value));
-  pending.set("theme", JSON.stringify(values));
+  pending.set("theme", JSON.stringify(current));
   savePending();
 });
 
-$("resetTheme").addEventListener("click", () => fillThemeFields(DEFAULT_THEME));
+$("resetTheme").addEventListener("click", () => chooseTheme("gold", DEFAULT_THEME));
 
 $("publishSite").addEventListener("click", async () => {
   if (pending.size) return setMsg($("siteMsg"), "Please press Save changes first, then publish.");
