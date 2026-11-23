@@ -138,7 +138,11 @@ function collect(status) {
   };
 }
 
+// Set to false when posting should be allowed again.
+const POSTING_PAUSED = true;
+
 async function save(status) {
+  if (POSTING_PAUSED) return setMsg($("formMsg"), "Posting is paused for now. Please try again later.");
   const { error: err, row } = collect(status);
   if (err) return setMsg($("formMsg"), err);
   if (status === "published") row.published_at = new Date().toISOString();
