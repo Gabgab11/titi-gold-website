@@ -119,8 +119,9 @@
 
         <div id="editorPanel" hidden>
           <div class="admin-top">
-            <h1>Admin</h1>
-            <nav class="admin-tabs" aria-label="Sections"><button type="button" class="admin-tab" data-tab="blog" aria-pressed="true">TITIGOLD SPEAKS</button><button type="button" class="admin-tab" data-tab="books" aria-pressed="false">Books</button><button type="button" class="admin-tab" data-tab="pages" aria-pressed="false">Website pages</button><button type="button" class="admin-tab" data-tab="theme" aria-pressed="false">Themes</button><button type="button" class="admin-tab" data-tab="team" aria-pressed="false">Team</button></nav>
+            <p class="eyebrow">Titi Gold</p>
+            <h1>Admin dashboard</h1>
+            <nav class="admin-tabs" aria-label="Sections"><button type="button" class="admin-tab" data-tab="blog" aria-pressed="true">TITIGOLD SPEAKS</button><button type="button" class="admin-tab" data-tab="books" aria-pressed="false">Books</button><button type="button" class="admin-tab" data-tab="pages" aria-pressed="false">Website text</button><button type="button" class="admin-tab" data-tab="theme" aria-pressed="false">Themes</button><button type="button" class="admin-tab" data-tab="team" aria-pressed="false">Team</button></nav>
             <div class="admin-row"><button class="btn" type="button" id="publishSite">Publish website changes</button><span id="whoami" class="muted"></span><button class="btn-ghost" type="button" id="signOut">Sign out</button></div>
           </div>
           <p id="siteMsg" class="admin-msg" role="status" aria-live="polite"></p>
@@ -196,7 +197,7 @@
             </div>
           </div>
           <div id="teamPanel" hidden>
-            <p class="muted">Invite someone to help manage the website. They get an email, choose a password, and can then sign in here.</p>
+            <p class="muted">Invite someone to help manage the website. They get an email with a link to choose their password, then they can sign in here.</p>
             <form id="inviteForm" class="admin-form admin-stack" novalidate>
               <label>Email address of the person to invite
                 <input type="email" id="inviteEmail" required autocomplete="off">
@@ -204,7 +205,6 @@
               <div class="admin-row"><button class="btn" type="submit" id="sendInvite">Send invite</button></div>
               <p id="teamMsg" class="admin-msg" role="status" aria-live="polite"></p>
             </form>
-            </div>
             <h2 class="admin-stack">Current team</h2>
             <ul class="admin-list" id="teamList"></ul>
           </div>

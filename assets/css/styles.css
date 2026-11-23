@@ -1395,3 +1395,16 @@ section[tabindex="-1"]:focus, main[tabindex="-1"]:focus { outline: none; }
 .theme-swatches i { display: block; width: 36px; height: 28px; }
 .theme-custom { margin: 12px 0 18px; }
 .theme-custom summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; }
+
+/* Admin dashboard layout and colours */
+.admin-top { border-bottom: 1px solid var(--line); padding-bottom: 20px; margin-bottom: 20px; }
+.admin-top h1 { margin: 4px 0 18px; }
+.admin-top .eyebrow { margin: 0; color: var(--gold-ink); }
+.admin-tabs { margin-bottom: 18px; }
+.admin-tab { min-height: 44px; }
+.admin-tab:hover { border-color: var(--gold); }
+.admin-tab:focus-visible, .theme-card:focus-visible, .admin-row label:focus-within { outline: 3px solid var(--gold); outline-offset: 2px; }
+.admin-tab[aria-pressed="true"] { background: var(--black); color: var(--champagne); border-color: var(--black); }
+#whoami { word-break: break-all; }
+.admin-help { color: var(--muted); font-size: 0.95rem; }
+.page-item, .theme-card, .admin-list li { border-color: var(--line); }
