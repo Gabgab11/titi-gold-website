@@ -45,12 +45,12 @@ Deno.serve(async (req) => {
     const { error: addError } = await admin.from("admins").upsert({ email });
     if (addError) return json({ error: addError.message }, 500);
 
-    const { error } = await admin.auth.admin.inviteUserByEmail(email, { redirectTo: SITE + "/admin.html" });
+    const { error } = await admin.auth.admin.inviteUserByEmail(email, { redirectTo: SITE + "/admin" });
     if (error) {
       const exists = /already|registered|exists/i.test(error.message);
       if (!exists) return json({ error: "The invite could not be sent. " + error.message }, 500);
       // They already have a sign-in: send a password reset instead.
-      const { error: resetError } = await caller.auth.resetPasswordForEmail(email, { redirectTo: SITE + "/admin.html" });
+      const { error: resetError } = await caller.auth.resetPasswordForEmail(email, { redirectTo: SITE + "/admin" });
       if (resetError) return json({ error: "The email could not be sent. " + resetError.message }, 500);
       return json({ ok: true, message: email + " already has a sign-in, so we sent a password reset email instead." });
     }

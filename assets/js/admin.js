@@ -585,7 +585,7 @@ $("setPasswordForm").addEventListener("submit", async (e) => {
 $("forgotPassword").addEventListener("click", async () => {
   const email = $("loginEmail").value.trim();
   if (!email) return setMsg($("loginMsg"), "Type your email address above first, then press Forgot password.");
-  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: SITE_URL + "/admin.html" });
+  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: SITE_URL + "/admin" });
   setMsg($("loginMsg"), error ? "The email could not be sent. " + error.message : "If that email has an account, a link to choose a new password is on its way.", !error);
 });
 
