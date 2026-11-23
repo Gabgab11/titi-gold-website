@@ -106,9 +106,10 @@
         <div id="editorPanel" hidden>
           <div class="admin-top">
             <h1>Admin</h1>
-            <nav class="admin-tabs" aria-label="Sections"><button type="button" class="admin-tab" data-tab="blog" aria-pressed="true">Blog</button><button type="button" class="admin-tab" data-tab="books" aria-pressed="false">Books</button></nav>
-            <div class="admin-row"><span id="whoami" class="muted"></span><button class="btn-ghost" type="button" id="signOut">Sign out</button></div>
+            <nav class="admin-tabs" aria-label="Sections"><button type="button" class="admin-tab" data-tab="blog" aria-pressed="true">Blog</button><button type="button" class="admin-tab" data-tab="books" aria-pressed="false">Books</button><button type="button" class="admin-tab" data-tab="pages" aria-pressed="false">Website pages</button><button type="button" class="admin-tab" data-tab="theme" aria-pressed="false">Colours</button></nav>
+            <div class="admin-row"><button class="btn" type="button" id="publishSite">Publish website changes</button><span id="whoami" class="muted"></span><button class="btn-ghost" type="button" id="signOut">Sign out</button></div>
           </div>
+          <p id="siteMsg" class="admin-msg" role="status" aria-live="polite"></p>
           <div id="blogPanel"><div class="admin-grid">
             <aside>
               <button class="btn" type="button" id="newPost">New post</button>
@@ -152,6 +153,30 @@
               </div>
             </form>
           </div></div>
+          <div id="pagesPanel" hidden>
+            <div class="admin-form">
+              <label>Page
+                <select id="pageSelect">
+                  <option value="index">Home</option>
+                  <option value="about">About</option>
+                  <option value="books">Books</option>
+                  <option value="foundation">Foundation</option>
+                  <option value="fashion">Fashion Hub</option>
+                </select>
+              </label>
+              <p class="muted">Change the words and pictures below, then press Save changes. Press Publish website changes at the top to show them on the live site.</p>
+            </div>
+            <div id="pageItems" class="admin-form admin-stack"></div>
+            <div class="admin-row admin-stack"><button class="btn" type="button" id="savePage">Save changes</button></div>
+          </div>
+          <div id="themePanel" hidden>
+            <p class="muted">Choose the website colours. Press Save colours, then Publish website changes at the top.</p>
+            <div id="themeFields" class="admin-form admin-stack"></div>
+            <div class="admin-row admin-stack">
+              <button class="btn" type="button" id="saveTheme">Save colours</button>
+              <button class="btn-ghost" type="button" id="resetTheme">Use the original colours</button>
+            </div>
+          </div>
           <div id="booksPanel" hidden>
             <div class="admin-grid">
               <aside>

@@ -1,6 +1,7 @@
 // Admin page for Titi Gold: sign in by email link, then write, upload, publish and share posts.
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm";
 import { SUPABASE_URL, SUPABASE_KEY, SITE_URL } from "./supabase-config.js";
+import { editableTexts, editableImages, DEFAULT_THEME } from "./editable.js";
 
 const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 const $ = (id) => document.getElementById(id);
@@ -233,8 +234,12 @@ $("copyLink").addEventListener("click", async () => {
 function showTab(name) {
   $("blogPanel").hidden = name !== "blog";
   $("booksPanel").hidden = name !== "books";
+  $("pagesPanel").hidden = name !== "pages";
+  $("themePanel").hidden = name !== "theme";
   document.querySelectorAll(".admin-tab").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.tab === name)));
   if (name === "books") loadBooks();
+  if (name === "pages") loadPage($("pageSelect").value);
+  if (name === "theme") loadTheme();
 }
 document.querySelectorAll(".admin-tab").forEach((b) => b.addEventListener("click", () => showTab(b.dataset.tab)));
 
@@ -331,6 +336,225 @@ $("bookCover").addEventListener("change", async (e) => {
     setMsg($("bookMsg"), "The cover could not be uploaded. " + err.message);
   }
   e.target.value = "";
+});
+
+// ---- Website text, pictures and colours ----
+// Changes are saved as drafts first; "Publish website changes" copies every draft to the live site.
+const LABELS = { h1: "Heading", h2: "Heading", h3: "Heading", h4: "Heading", p: "Paragraph", li: "List item", figcaption: "Caption", blockquote: "Quote" };
+let pageName = "index";
+let pageDoc = null;
+let liveRows = new Map();
+let draftRows = new Map();
+let pending = new Map(); // key -> value, not yet saved as drafts
+
+const parseJSON = (s) => {
+  try { return JSON.parse(s); } catch { return null; }
+};
+const svgOf = (el) => el.querySelector("svg")?.outerHTML || "";
+const htmlWithoutSvg = (el) => {
+  const copy = el.cloneNode(true);
+  copy.querySelectorAll("svg").forEach((s) => s.remove());
+  return copy.innerHTML.trim();
+};
+
+async function loadSiteRows() {
+  const [live, drafts] = await Promise.all([
+    sb.from("site_content").select("key,value"),
+    sb.from("site_content_draft").select("key,value"),
+  ]);
+  const err = live.error || drafts.error;
+  if (err) {
+    setMsg($("siteMsg"), "Website changes could not be loaded. " + err.message);
+    return false;
+  }
+  liveRows = new Map(live.data.map((r) => [r.key, r.value]));
+  draftRows = new Map(drafts.data.map((r) => [r.key, r.value]));
+  return true;
+}
+
+const savedValue = (key) => draftRows.get(key) ?? liveRows.get(key) ?? null;
+
+async function savePending() {
+  if (!pending.size) return setMsg($("siteMsg"), "Nothing new to save.", true);
+  const entries = [...pending.entries()];
+  const now = new Date().toISOString();
+  const { error } = await sb
+    .from("site_content_draft")
+    .upsert(entries.map(([key, value]) => ({ key, value, updated_at: now })));
+  if (error) return setMsg($("siteMsg"), "Could not save. " + error.message);
+  for (const [key, value] of entries) {
+    draftRows.set(key, value);
+    pending.delete(key);
+  }
+  setMsg($("siteMsg"), "Saved. Press Publish website changes to show it on the live site.", true);
+}
+
+async function loadPage(name) {
+  pageName = name;
+  $("pageItems").replaceChildren();
+  setMsg($("siteMsg"), "Loading…");
+  try {
+    const html = await fetch(`${name}.html`, { cache: "no-store" }).then((r) => {
+      if (!r.ok) throw new Error("the page could not be found");
+      return r.text();
+    });
+    pageDoc = new DOMParser().parseFromString(html, "text/html");
+  } catch (err) {
+    return setMsg($("siteMsg"), "This page could not be opened. " + err.message);
+  }
+  if (!(await loadSiteRows())) return;
+  renderPage();
+  setMsg($("siteMsg"), "");
+}
+
+function textItem(el, i) {
+  const key = `t:${pageName}:${i}`;
+  const orig = el.textContent.trim();
+  const originalHtml = htmlWithoutSvg(el);
+  const svg = svgOf(el);
+  const saved = parseJSON(savedValue(key));
+  const shown = saved?.html ? saved.html.replace(/<svg[\s\S]*?<\/svg>/g, "").trim() : originalHtml;
+
+  const wrap = document.createElement("div");
+  wrap.className = "page-item";
+  const label = document.createElement("span");
+  label.className = "muted";
+  label.textContent = `${LABELS[el.tagName.toLowerCase()] || "Text"}: ${orig.slice(0, 70)}`;
+  const ta = document.createElement("textarea");
+  ta.rows = Math.min(8, Math.max(2, Math.ceil(shown.length / 70)));
+  ta.value = shown;
+  ta.setAttribute("aria-label", label.textContent);
+  ta.addEventListener("input", () => {
+    pending.set(key, JSON.stringify({ orig, html: ta.value.trim() + (svg ? " " + svg : "") }));
+  });
+  const restore = document.createElement("button");
+  restore.type = "button";
+  restore.className = "btn-ghost";
+  restore.textContent = "Restore original";
+  restore.addEventListener("click", () => {
+    ta.value = originalHtml;
+    pending.set(key, JSON.stringify({ orig, html: el.innerHTML }));
+  });
+  wrap.append(label, ta, restore);
+  return wrap;
+}
+
+function imageItem(img, i) {
+  const key = `i:${pageName}:${i}`;
+  const orig = img.getAttribute("src");
+  const saved = parseJSON(savedValue(key));
+  const wrap = document.createElement("div");
+  wrap.className = "page-item";
+  const label = document.createElement("span");
+  label.className = "muted";
+  label.textContent = `Picture: ${img.getAttribute("alt") || orig}`;
+  const thumb = document.createElement("img");
+  thumb.src = saved?.src || orig;
+  thumb.alt = "";
+  const row = document.createElement("div");
+  row.className = "admin-row";
+  const pick = document.createElement("label");
+  pick.className = "btn-ghost";
+  pick.textContent = "Replace picture";
+  const file = document.createElement("input");
+  file.type = "file";
+  file.accept = "image/*";
+  file.hidden = true;
+  pick.append(file);
+  file.addEventListener("change", async () => {
+    const f = file.files[0];
+    if (!f) return;
+    setMsg($("siteMsg"), "Uploading picture…");
+    try {
+      const url = await upload(f);
+      pending.set(key, JSON.stringify({ orig, src: url }));
+      thumb.src = url;
+      setMsg($("siteMsg"), "Picture ready. Press Save changes to keep it.", true);
+    } catch (err) {
+      setMsg($("siteMsg"), "The picture could not be uploaded. " + err.message);
+    }
+    file.value = "";
+  });
+  const restore = document.createElement("button");
+  restore.type = "button";
+  restore.className = "btn-ghost";
+  restore.textContent = "Restore original";
+  restore.addEventListener("click", () => {
+    thumb.src = orig;
+    pending.set(key, JSON.stringify({ orig, src: orig }));
+  });
+  row.append(pick, restore);
+  wrap.append(label, thumb, row);
+  return wrap;
+}
+
+function renderPage() {
+  const box = $("pageItems");
+  box.replaceChildren();
+  editableTexts(pageDoc).forEach((el, i) => box.append(textItem(el, i)));
+  editableImages(pageDoc).forEach((img, i) => box.append(imageItem(img, i)));
+  if (!box.children.length) setMsg($("siteMsg"), "Nothing on this page can be edited yet.");
+}
+
+$("pageSelect").addEventListener("change", (e) => {
+  if (pending.size && !confirm("You have changes that are not saved. Leave this page without saving?")) {
+    e.target.value = pageName;
+    return;
+  }
+  pending.clear();
+  loadPage(e.target.value);
+});
+$("savePage").addEventListener("click", savePending);
+
+function loadTheme() {
+  loadSiteRows().then((ok) => {
+    if (!ok) return;
+    const saved = parseJSON(savedValue("theme")) || {};
+    fillThemeFields({ ...DEFAULT_THEME, ...saved });
+  });
+}
+
+function fillThemeFields(values) {
+  const box = $("themeFields");
+  box.replaceChildren();
+  for (const [name, value] of Object.entries(DEFAULT_THEME)) {
+    const row = document.createElement("label");
+    row.className = "color-field";
+    const input = document.createElement("input");
+    input.type = "color";
+    input.value = values[name];
+    input.dataset.name = name;
+    const text = document.createElement("span");
+    text.textContent = THEME_LABELS[name] || name;
+    row.append(input, text);
+    box.append(row);
+  }
+}
+
+const THEME_LABELS = {
+  "--black": "Main dark colour (headings, dark sections)",
+  "--gold": "Gold (buttons, accents)",
+  "--gold-ink": "Gold for text on light backgrounds",
+  "--ivory": "Light background",
+  "--champagne": "Soft gold highlight",
+  "--linen": "Alternate light background",
+  "--muted": "Body text colour",
+};
+
+$("saveTheme").addEventListener("click", () => {
+  const values = {};
+  document.querySelectorAll("#themeFields input[type=color]").forEach((i) => (values[i.dataset.name] = i.value));
+  pending.set("theme", JSON.stringify(values));
+  savePending();
+});
+
+$("resetTheme").addEventListener("click", () => fillThemeFields(DEFAULT_THEME));
+
+$("publishSite").addEventListener("click", async () => {
+  if (pending.size) return setMsg($("siteMsg"), "Please press Save changes first, then publish.");
+  const { error } = await sb.rpc("publish_site_content");
+  if (error) return setMsg($("siteMsg"), "Could not publish. " + error.message);
+  setMsg($("siteMsg"), "Published. The website now shows your latest changes.", true);
 });
 
 init();

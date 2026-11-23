@@ -1376,3 +1376,14 @@ section[tabindex="-1"]:focus, main[tabindex="-1"]:focus { outline: none; }
 .share-box { display: grid; gap: 10px; border-top: 1px solid var(--line); padding-top: 16px; }
 .share-box input { font: inherit; font-size: 16px; padding: 10px; border: 1px solid #cfc8b8; width: 100%; box-sizing: border-box; }
 @media (max-width: 820px) { .admin-grid { grid-template-columns: 1fr; } }
+
+/* Admin: tabs, page editor, colours */
+.admin-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.admin-tab { font: inherit; font-size: 0.9rem; padding: 10px 16px; border: 1px solid var(--line); background: var(--white); color: var(--black); cursor: pointer; }
+.admin-tab[aria-pressed="true"] { background: var(--black); color: var(--gold); border-color: var(--black); }
+.admin-form select { font: inherit; font-size: 16px; padding: 12px; border: 1px solid #cfc8b8; background: #fff; color: #151515; width: 100%; box-sizing: border-box; }
+.admin-stack { margin-top: 24px; }
+.page-item { display: grid; gap: 10px; padding: 16px; border: 1px solid var(--line); background: var(--white); }
+.page-item img { width: 180px; height: auto; display: block; }
+.color-field { display: flex; align-items: center; gap: 12px; }
+.color-field input[type="color"] { width: 56px; height: 44px; padding: 0; border: 1px solid #cfc8b8; background: none; }

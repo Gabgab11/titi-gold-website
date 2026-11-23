@@ -40,6 +40,8 @@
        If you edit this script, update its sha256 hash in vercel.json. -->
   <script>(function(){var INTRO_MODE="always",d=document.documentElement;d.classList.add("js");var wf=document.getElementById("webfonts");if(wf){if(wf.sheet)wf.media="all";else wf.addEventListener("load",function(){wf.media="all"})}try{var still=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches,seen=false;try{seen=sessionStorage.getItem("tg-intro")==="1"}catch(e){}if(INTRO_MODE==="off"||still||(INTRO_MODE==="session"&&seen))return;var nav=performance.getEntriesByType?performance.getEntriesByType("navigation")[0]:null,type=nav?nav.type:"navigate",internal=false;try{internal=!!document.referrer&&new URL(document.referrer).origin===location.origin}catch(e){}if(type!=="reload"&&(type==="back_forward"||internal))return;try{sessionStorage.setItem("tg-intro","1")}catch(e){}d.classList.add("intro-active");if("scrollRestoration"in history)history.scrollRestoration="manual";if(location.hash)history.replaceState(null,"",location.pathname+location.search);var top=function(){window.scrollTo(0,0)};top();document.addEventListener("DOMContentLoaded",top);window.addEventListener("load",top);var done=false,timers=[];function finish(skipped){if(done)return;done=true;timers.forEach(clearTimeout);d.classList.add("intro-reveal");d.classList.remove("intro-active");if(skipped)d.classList.add("intro-skipped");setTimeout(function(){d.classList.remove("intro-skipped","intro-reveal");var el=document.getElementById("intro");if(el)el.remove()},skipped?500:50)}timers.push(setTimeout(function(){d.classList.add("intro-reveal")},4300));timers.push(setTimeout(function(){finish(false)},5050));document.addEventListener("keydown",function(e){if(e.key==="Escape")finish(true)},true);document.addEventListener("click",function(e){if(!done&&e.target.closest&&e.target.closest("#intro"))finish(true)},true)}catch(e){d.classList.remove("intro-active")}})();</script>
   <script type="module" src="assets/js/main.js"></script>
+  <script type="module" src="assets/js/content.js"></script>
+  <script type="module" src="assets/js/blog.js"></script>
 
   <script type="application/ld+json">
   {
@@ -366,7 +368,7 @@
           </div>
           <p>Writing is one of the ways I share the lessons, convictions, and reflections that shape my journey of faith and purpose.</p>
         </div>
-        <div class="book-grid">
+        <div class="book-grid" data-books-home>
           <article class="book" data-reveal>
             <div class="book-cover book-cover--image"><picture><source type="image/webp" srcset="assets/img/books/heralding-glory.webp"><img src="assets/img/books/heralding-glory.jpg" width="640" height="951" loading="lazy" decoding="async" alt="Cover of Heralding Glory, a memoir by Titi Gold"></picture></div>
             <div>

@@ -118,3 +118,26 @@ async function showBooks(container) {
 }
 const booksBox = document.querySelector("[data-books-list]");
 if (booksBox) showBooks(booksBox);
+
+// Home page book cards come from the database (published books only).
+async function showHomeBooks(container) {
+  const { data, error } = await sb
+    .from("books")
+    .select("title,description,cover_url")
+    .eq("status", "published")
+    .order("sort_order", { ascending: true });
+  if (error || !data || !data.length) return; // keep the built-in cards if nothing is available
+  container.innerHTML = data
+    .map(
+      (b) => `<article class="book">
+        ${b.cover_url ? `<div class="book-cover book-cover--image"><img src="${esc(b.cover_url)}" width="640" height="951" loading="lazy" decoding="async" alt="Cover of ${esc(b.title)}"></div>` : ""}
+        <div>
+          <h3>${esc(b.title)}</h3>
+          ${b.description ? `<p>${esc(b.description)}</p>` : ""}
+        </div>
+      </article>`
+    )
+    .join("");
+}
+const homeBooks = document.querySelector("[data-books-home]");
+if (homeBooks) showHomeBooks(homeBooks);
