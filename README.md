@@ -98,6 +98,13 @@ To use your own domain on GitHub Pages: repository **Settings → Pages → Cust
 
 > If you change the small inline `<script>` in the `<head>` of `index.html`, update its `sha256-…` hash in `vercel.json` or browsers will block it.
 
+## Blog and admin
+
+- **Blog:** `blog.html` lists published posts; `post.html?slug=…` shows one post with WhatsApp, email and copy-link sharing.
+- **Admin:** `admin.html` (not linked from the menu, marked noindex). Titi signs in with her email link, then writes, uploads pictures, publishes, unpublishes or deletes posts.
+- **Backend:** Supabase project TITIGOLD. The tables, image storage and access rules are in `supabase/blog-setup.sql`; run it once in the SQL Editor on a new project. Only emails listed in the `admins` table can write.
+- **Connecting a new Supabase project:** update `assets/js/supabase-config.js` (URL and publishable key) and the Supabase domain in `vercel.json`'s Content-Security-Policy.
+
 ## Opening animation
 
 Every time the home page is opened fresh or reloaded, it starts at the top with a 5-second animation (it is skipped when a visitor arrives from another page of the site, so links like Book / Enquire go straight to the form): the four gold-foil pieces of the TG monogram fly in and lock together, a light sweeps across the gold, the wordmark and tagline appear, and the screen lifts to reveal the site.
