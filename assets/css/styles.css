@@ -1431,9 +1431,9 @@ section[tabindex="-1"]:focus, main[tabindex="-1"]:focus { outline: none; }
 .reader-top h1:focus { outline: none; }
 .reader-page[hidden] { display: none; }
 .reader-page .post-body { min-height: 14rem; }
-.reader-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--line); }
-.reader-count { color: var(--muted); font-size: 0.95rem; }
-.reader-controls button { min-height: 44px; }
+.reader-controls { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 12px; margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--line); }
+.reader-count { grid-column: 1 / -1; order: -1; text-align: center; color: var(--muted); font-size: 0.95rem; }
+.reader-controls button { min-height: 44px; width: 100%; }
 .reader-controls button:disabled { opacity: 0.4; cursor: default; }
 .reader-close { display: block; margin: 18px auto 0; min-height: 44px; }
 

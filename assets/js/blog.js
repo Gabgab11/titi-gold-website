@@ -204,13 +204,19 @@ function setupBook(root) {
 
   root.querySelector("[data-open]").addEventListener("click", open);
   root.querySelector("[data-close]").addEventListener("click", close);
+  // Turning a page keeps the reader where it is. Only if the start of the
+  // page has scrolled out of view do we bring it back, without any animation.
+  const keepPageInView = () => {
+    const top = book.getBoundingClientRect().top;
+    if (top < 90) window.scrollTo({ top: window.scrollY + top - 90, behavior: "instant" });
+  };
   prev.addEventListener("click", () => {
     show(index - 1);
-    root.scrollIntoView({ behavior: "smooth", block: "start" });
+    keepPageInView();
   });
   next.addEventListener("click", () => {
     show(index + 1);
-    root.scrollIntoView({ behavior: "smooth", block: "start" });
+    keepPageInView();
   });
   document.addEventListener("keydown", (e) => {
     if (book.hidden || e.target.closest?.("input, textarea")) return;
