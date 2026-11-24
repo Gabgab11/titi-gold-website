@@ -243,11 +243,13 @@ function showTab(name) {
   $("booksPanel").hidden = name !== "books";
   $("pagesPanel").hidden = name !== "pages";
   $("themePanel").hidden = name !== "theme";
+  $("commentsPanel").hidden = name !== "comments";
   document.querySelectorAll(".admin-tab").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.tab === name)));
   if (name === "books") loadBooks();
   if (name === "pages") loadPage($("pageSelect").value);
   if (name === "theme") loadTheme();
   if (name === "team") loadTeam();
+  if (name === "comments") loadComments();
   $("teamPanel").hidden = name !== "team";
 }
 document.querySelectorAll(".admin-tab").forEach((b) => b.addEventListener("click", () => showTab(b.dataset.tab)));
@@ -718,3 +720,70 @@ $("inviteForm").addEventListener("submit", async (e) => {
 });
 
 init();
+
+
+// ---- Comments: approve or delete what visitors send ----
+async function loadComments() {
+  const { data, error } = await sb
+    .from("post_comments")
+    .select("id,name,body,created_at,approved,posts(title)")
+    .order("created_at", { ascending: false });
+  if (error) return setMsg($("commentMsg"), "Comments could not be loaded. " + error.message);
+  setMsg($("commentMsg"), "");
+  const waiting = $("pendingComments");
+  const live = $("approvedComments");
+  waiting.replaceChildren();
+  live.replaceChildren();
+  const rows = data || [];
+  const pending = rows.filter((c) => !c.approved);
+  const approved = rows.filter((c) => c.approved);
+  if (!pending.length) waiting.append(emptyItem("No comments are waiting for approval."));
+  pending.forEach((c) => waiting.append(commentItem(c)));
+  if (!approved.length) live.append(emptyItem("No approved comments yet."));
+  approved.forEach((c) => live.append(commentItem(c)));
+}
+
+function emptyItem(text) {
+  const li = document.createElement("li");
+  li.className = "muted";
+  li.textContent = text;
+  return li;
+}
+
+function commentItem(c) {
+  const li = document.createElement("li");
+  li.className = "comment-admin";
+  const head = document.createElement("p");
+  head.className = "muted";
+  const when = c.created_at ? new Date(c.created_at).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) : "";
+  head.textContent = `${c.name} · on "${c.posts?.title || "a post"}" · ${when}`;
+  const text = document.createElement("p");
+  text.textContent = c.body;
+  const row = document.createElement("div");
+  row.className = "admin-row";
+  if (!c.approved) {
+    const ok = document.createElement("button");
+    ok.className = "btn";
+    ok.type = "button";
+    ok.textContent = "Approve";
+    ok.addEventListener("click", async () => {
+      const { error } = await sb.from("post_comments").update({ approved: true }).eq("id", c.id);
+      if (error) return setMsg($("commentMsg"), "Could not approve. " + error.message);
+      loadComments();
+    });
+    row.append(ok);
+  }
+  const del = document.createElement("button");
+  del.className = "btn-ghost danger";
+  del.type = "button";
+  del.textContent = "Delete";
+  del.addEventListener("click", async () => {
+    if (!confirm("Delete this comment permanently?")) return;
+    const { error } = await sb.from("post_comments").delete().eq("id", c.id);
+    if (error) return setMsg($("commentMsg"), "Could not delete. " + error.message);
+    loadComments();
+  });
+  row.append(del);
+  li.append(head, text, row);
+  return li;
+}
