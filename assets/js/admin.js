@@ -29,6 +29,7 @@ function showEditor(email) {
   $("editorPanel").hidden = false;
   $("whoami").textContent = email;
   loadPosts();
+  updateCommentBadge();
   newPost();
 }
 
@@ -63,22 +64,61 @@ $("signOut").addEventListener("click", async () => {
 async function loadPosts() {
   const { data, error } = await sb
     .from("posts")
-    .select("id,title,status,updated_at")
+    .select("id,title,status,updated_at,published_at")
     .order("updated_at", { ascending: false });
-  const list = $("postList");
-  list.replaceChildren();
+  const box = $("postList");
+  box.replaceChildren();
   if (error) return setMsg($("formMsg"), "Posts could not be loaded: " + error.message);
-  for (const p of data) {
+  const published = data
+    .filter((p) => p.status === "published")
+    .sort((a, b) => new Date(b.published_at || b.updated_at) - new Date(a.published_at || a.updated_at));
+  const drafts = data.filter((p) => p.status !== "published");
+  box.append(postGroup("Published", published, "No posts are published yet.", "Published"));
+  box.append(postGroup("Drafts", drafts, "No drafts. Saved drafts appear here.", "Last saved"));
+}
+
+function postGroup(title, items, emptyText, dateLabel) {
+  const section = document.createElement("section");
+  section.className = "post-group";
+  const heading = document.createElement("h3");
+  heading.textContent = `${title} (${items.length})`;
+  const list = document.createElement("ul");
+  list.className = "admin-list";
+  if (!items.length) {
+    const li = document.createElement("li");
+    li.className = "muted";
+    li.textContent = emptyText;
+    list.append(li);
+  }
+  for (const p of items) {
     const li = document.createElement("li");
     const btn = document.createElement("button");
     btn.type = "button";
     btn.dataset.id = p.id;
     btn.setAttribute("aria-current", String(p.id === currentId));
-    btn.textContent = `${p.title || "Untitled"} (${p.status === "published" ? "published" : "draft"})`;
+    const name = document.createElement("strong");
+    name.textContent = p.title || "Untitled";
+    const when = document.createElement("span");
+    when.className = "muted";
+    const stamp = p.status === "published" ? p.published_at : p.updated_at;
+    when.textContent = `${dateLabel} ${formatDay(stamp)}`;
+    btn.append(name, when);
     btn.addEventListener("click", () => loadPost(p.id));
     li.append(btn);
     list.append(li);
   }
+  section.append(heading, list);
+  return section;
+}
+
+const formatDay = (d) => (d ? new Date(d).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : "");
+
+// The Comments tab shows how many visitor comments are waiting for approval.
+async function updateCommentBadge() {
+  const { count, error } = await sb.from("post_comments").select("id", { count: "exact", head: true }).eq("approved", false);
+  const tab = document.querySelector('[data-tab="comments"]');
+  if (!tab || error) return;
+  tab.textContent = count ? `Comments (${count} to approve)` : "Comments";
 }
 
 function fillForm(p) {
@@ -730,6 +770,7 @@ async function loadComments() {
     .order("created_at", { ascending: false });
   if (error) return setMsg($("commentMsg"), "Comments could not be loaded. " + error.message);
   setMsg($("commentMsg"), "");
+  updateCommentBadge();
   const waiting = $("pendingComments");
   const live = $("approvedComments");
   waiting.replaceChildren();

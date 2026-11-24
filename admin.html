@@ -121,14 +121,14 @@
           <div class="admin-top">
             <p class="eyebrow">Titi Gold</p>
             <h1>Admin dashboard</h1>
-            <nav class="admin-tabs" aria-label="Sections"><button type="button" class="admin-tab" data-tab="blog" aria-pressed="true">TITIGOLD SPEAKS</button><button type="button" class="admin-tab" data-tab="books" aria-pressed="false">Books</button><button type="button" class="admin-tab" data-tab="pages" aria-pressed="false">Website text</button><button type="button" class="admin-tab" data-tab="theme" aria-pressed="false">Themes</button><button type="button" class="admin-tab" data-tab="comments" aria-pressed="false">Comments</button><button type="button" class="admin-tab" data-tab="team" aria-pressed="false">Team</button></nav>
+            <nav class="admin-tabs" aria-label="Sections"><button type="button" class="admin-tab" data-tab="blog" aria-pressed="true">Blog posts</button><button type="button" class="admin-tab" data-tab="books" aria-pressed="false">Books</button><button type="button" class="admin-tab" data-tab="pages" aria-pressed="false">Website text</button><button type="button" class="admin-tab" data-tab="theme" aria-pressed="false">Themes</button><button type="button" class="admin-tab" data-tab="comments" aria-pressed="false">Comments</button><button type="button" class="admin-tab" data-tab="team" aria-pressed="false">Team</button></nav>
             <div class="admin-row"><button class="btn" type="button" id="publishSite">Publish website changes</button><span id="whoami" class="muted"></span><button class="btn-ghost" type="button" id="signOut">Sign out</button></div>
           </div>
           <p id="siteMsg" class="admin-msg" role="status" aria-live="polite"></p>
           <div id="blogPanel"><div class="admin-grid">
             <aside>
               <button class="btn" type="button" id="newPost">New post</button>
-              <ul class="admin-list" id="postList"></ul>
+              <div id="postList" class="post-groups"></div>
             </aside>
             <form id="postForm" class="admin-form" novalidate onsubmit="return false">
               <input type="hidden" id="postId">

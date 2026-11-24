@@ -1446,3 +1446,11 @@ section[tabindex="-1"]:focus, main[tabindex="-1"]:focus { outline: none; }
 .comment-note { font-size: 0.9rem; margin: 0; }
 .comment-admin { padding: 14px 0; border-bottom: 1px solid var(--line); }
 .comment-admin p { margin: 4px 0; }
+
+/* Admin: posts grouped into Published and Drafts */
+.post-groups { display: grid; gap: 22px; margin-top: 14px; }
+.post-group h3 { font-size: 0.8rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-ink); margin: 0 0 8px; }
+.post-group .admin-list { margin-top: 0; }
+.post-group .admin-list button { display: grid; gap: 2px; }
+.post-group .admin-list button strong { font-weight: 600; }
+.post-group .admin-list button span { font-size: 0.85rem; }
