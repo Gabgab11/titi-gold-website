@@ -1,10 +1,9 @@
 // Applies the text, picture and colour changes Titi has published.
 // Pages with nothing published (or no connection) show the built-in content.
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm";
+// Uses a plain request rather than the full Supabase library, so phones download less.
 import { SUPABASE_URL, SUPABASE_KEY } from "./supabase-config.js";
 import { editableTexts, editableImages } from "./editable.js";
 
-const sb = createClient(SUPABASE_URL, SUPABASE_KEY, { auth: { persistSession: false } });
 const page = (location.pathname.split("/").pop() || "index.html").replace(/\.html$/, "") || "index";
 
 function apply(rows) {
@@ -44,8 +43,13 @@ function apply(rows) {
 }
 
 async function run() {
-  const { data, error } = await sb.from("site_content").select("key,value");
-  if (error || !data) return;
-  apply(data);
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/site_content?select=key,value`, {
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (Array.isArray(data)) apply(data);
+  } catch {}
 }
 run();

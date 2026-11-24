@@ -1454,3 +1454,8 @@ section[tabindex="-1"]:focus, main[tabindex="-1"]:focus { outline: none; }
 .post-group .admin-list button { display: grid; gap: 2px; }
 .post-group .admin-list button strong { font-weight: 600; }
 .post-group .admin-list button span { font-size: 0.85rem; }
+
+/* Phones: skip the endless hero drift and the infinite spinner-like effects to keep scrolling smooth */
+@media (max-width: 720px) {
+  .hero-rings span { animation: none; }
+}
