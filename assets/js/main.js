@@ -171,7 +171,7 @@ function renderContact() {
   }
 
   const socialWrap = $("[data-social-links]");
-  const names = { instagram: "Instagram", facebook: "Facebook", tiktok: "TikTok", linkedin: "LinkedIn", youtube: "YouTube" };
+  const names = { instagram: "Instagram", instagramEvents: "Instagram (events)", facebook: "Facebook", tiktok: "TikTok", linkedin: "LinkedIn", youtube: "YouTube" };
   const socials = Object.entries(SITE.social || {}).filter(([key, url]) => url && names[key]);
   if (socialWrap && socials.length) {
     socialWrap.replaceChildren(...socials.map(([key, url]) => {
@@ -180,7 +180,7 @@ function renderContact() {
       a.target = "_blank";
       a.rel = "noopener";
       a.setAttribute("aria-label", `TITI GOLD on ${names[key]} (opens in a new tab)`);
-      a.append(svgIcon(key));
+      a.append(svgIcon(key === "instagramEvents" ? "instagram" : key));
       return a;
     }));
     socialWrap.hidden = false;

@@ -20,10 +20,12 @@ export const SITE = {
 
   // Full profile URLs, e.g. "https://instagram.com/titigold".
   social: {
-    instagram: "",
-    facebook: "",
+    instagram: "https://www.instagram.com/titigold_1/",
+    // A second Instagram account (events) gets its own icon in the footer.
+    instagramEvents: "https://www.instagram.com/eventbytitigold/",
+    facebook: "https://www.facebook.com/share/1AEG2uFgiA/",
     tiktok: "",
-    linkedin: "",
+    linkedin: "https://www.linkedin.com/in/titi-mojisola-ogundele-a401b5203/",
     youtube: "",
   },
 
